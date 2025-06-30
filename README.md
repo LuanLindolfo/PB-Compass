@@ -53,3 +53,63 @@ A instância EC2 foi configurada na VPC criada anteriormente, na sub-rede públi
 Após as execuções, é possível conectar-se à instância EC2 utilizando o IP da máquina local através do comando SSH (no subsistema Ubuntu) ou diretamente pela conexão fornecida pela AWS.
 
 # Configuração do Servidor Web
+Foi utilizado o servidor web NGINX que tem forte característica estável e com recursos eficiente. 
+
+## Instalação do serviço
+
+Para subir o servidor Nginx, foram realizados os seguintes passos com o usuário root, e se não for possível usuário root, utilizando o comando `sudo`:
+
+* **Atualização dos pacotes:**
+    ```bash
+    sudo apt update
+    ```
+* **Instalação o Nginx:**
+    ```bash
+    sudo apt install nginx
+    ```
+* **Permitindo o serviço no firewall (no Ubuntu é ufw) e ative o serviço:**
+    ```bash
+    sudo ufw enable
+    ```
+* **Listando os serviços pelo ufw:**
+    ```bash
+    sudo ufw app list
+    ```
+* **Permitindo o tráfego HTTP e HTTPS:**
+    ```bash
+    sudo ufw allow 'Nginx HTTP'
+    sudo ufw allow 'Nginx HTTPS'
+    ```
+* **Verificando o status do firewall para ver se está ativo e permitido:**
+    ```bash
+    sudo ufw status
+    ```
+* **Verificando o status do Nginx:**
+    ```bash
+    systemctl status nginx
+    ```
+* **Teste no navegador para ver se está funcionando:**
+    Acesse o IP da sua máquina EC2 no navegador. Você deverá ver a página de boas-vindas do Nginx.
+   Pesquise o IP e:
+  
+    ```bash
+    http://{ip} ou https://{ip}
+    ```
+    Em caso de teste no subsistema, é possível acessar com o endereço da máquina atuante (desde que seja permitido no grupo de segurança)
+    Em outro caso, há a possibilidade se conectar, por meio da máquina, ao servidor web do Nginx
+    ```bash
+  http://localhost
+    ```
+
+    ### Configuração do HTML do site
+  Para melhor visualização, o hmtl do site, para acesso com IP, pode ser alterado por meio do editor VI no diretório 
+      ```
+  /usr/share/nginx/html/
+      ``` ou pelo diretório do local host
+        ```
+/var/www/html/
+      ```
+
+  # Script de Monitoramento + Webhook via Discord
+  ## Webhook no canal de texto do discord
+  Para recebimento da notificação de monitoramento do site, foi criado um servidor no discord com um canal de texto para o alerta. Dentro destas configurações, no canal de texto foi criado um webhook em integrações do canal e gerado um link que será utilizado no scirpt.
