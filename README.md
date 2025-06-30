@@ -157,3 +157,15 @@ Após esse comando, basta implementar o script do melhor jeito com mensagens per
 * * * * * /usr/local/bin/monitoramentobin.sh >> /var/log/monitoramento_web/cron_output.log 2>&1
 ```
 Dessa forma, este comando agenda a execução do script ```/usr/local/bin/monitoramentobin.sh``` com informação do diretório .bin no tempo determinado redirecionando a saída para o arquivo log ```cron_output.log```
+
+**Teste do serviço**
+Para testagem do funcionamento do serviço, basta parar o nginx por meio do comando
+ ```bash
+  systemctl stop nginx
+  ```
+  E em seguida, verificar no canal de texto no servidor do discord a mensagem de site offline
+
+  Para reativar o site e realizar o teste para a mensagem de site online, basta começar o serviço do nginx por meio do comando
+   ```bash
+  systemctl start nginx
+  ```
