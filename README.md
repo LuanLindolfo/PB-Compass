@@ -155,4 +155,4 @@ Após esse comando, basta implementar o script do melhor jeito com mensagens per
   ```bash
 * * * * * /usr/local/bin/monitoramentobin.sh >> /var/log/monitoramento_web/cron_output.log 2>&1
 ```
-Dessa forma, este comando agenda a execução do script ```/usr/local/bin/monitoramentobin.sh``` com informação do diretório .bin no tempo determinado redireciionando a saída para o arquivo log ```cron_output.log```
+Dessa forma, este comando agenda a execução do script ```/usr/local/bin/monitoramentobin.sh``` com informação do diretório .bin no tempo determinado redirecionando a saída para o arquivo log ```cron_output.log```
