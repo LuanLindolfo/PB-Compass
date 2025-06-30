@@ -113,3 +113,46 @@ Para subir o servidor Nginx, foram realizados os seguintes passos com o usuário
   # Script de Monitoramento + Webhook via Discord
   ## Webhook no canal de texto do discord
   Para recebimento da notificação de monitoramento do site, foi criado um servidor no discord com um canal de texto para o alerta. Dentro destas configurações, no canal de texto foi criado um webhook em integrações do canal e gerado um link que será utilizado no scirpt.
+
+
+## Script via Bash
+Para que o script seja corretamente implementado, é necessário a criação e implementação de logs (arquivos que armazenam informações de um script como variáveis, comandos e outras informações). Nesse caso, os logs são armazenados no diretório ``` /var/log/ ```, sendo assim, o mesmo local onde será colocado o log do script de monitoramento.
+O arquivo bin também é de extrema importância por ser o local de armazenamento de executáveis, que nesse caso, será o script instalado e não gerenciado pelo sistema.
+* **Navengando até o diretório do ```.log```**
+  ```bash
+   cd /var/log/
+  ```
+* **Criando o log**
+  ``` bash
+  mkdir -p monitoramento_web
+  ```
+  
+  Nesse caso, o comando ``` mkdir ``` cria o arquivo, o ``` -p ``` ignora erros de forma inteligente e, em seguida, o nome é implementado.
+* **Navegando até o diretório do ```.bin```**
+  Com base nas características do processo, o caminho será o diretório bin onde script implementados manualmente são alocados.
+  ```bash
+  /usr/local/bin/
+  ```
+
+  * **Criando e alterando o conteúdo do arquivo para funcionamento do scirpt**
+  ```bash
+  vi /usr/local/bin/monitoramentobin.sh
+  ```
+Após esse comando, basta implementar o script do melhor jeito com mensagens personalizadas. O script implementado está anexado ao repositório.
+
+* **Script executável**
+    ```bash
+  chmod +x /usr/local/bin/monitorar_site.sh
+     ```
+    Dessa forma, ao utilizar o  ```chmod ``` (Change Mode) as permissões do arquivo são alteradas em conjunto com o comando  ```+x ``` para que a permissão de execução seja aplicada, caso contrário, o script não irá funcionar como um programa executável.
+* **Utilizando o crontab para tempo de monitoramento**
+* **Abrindo para edição**
+* ```bash
+  crontab -e
+  ```
+  Após este processo, o utilitário crontab (para agendamento de processos em horários específicos ou em intervalos) será aberto, vem instalado por vezes, mas caso contrário, será instalado.
+ * **Adicionando a linha de agendamento ao final do arquivo log**
+  ```bash
+* * * * * /usr/local/bin/monitoramentobin.sh >> /var/log/monitoramento_web/cron_output.log 2>&1
+```
+Dessa forma, este comando agenda a execução do script ```/usr/local/bin/monitoramentobin.sh``` com informação do diretório .bin no tempo determinado redireciionando a saída para o arquivo log ```cron_output.log```
