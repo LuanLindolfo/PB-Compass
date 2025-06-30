@@ -3,9 +3,10 @@
 - [Objetivos](#objetivos)
 - [Testes](#testes)
 - [Configuração do Ambiente](#configuração-do-ambiente)
-- [Uso](#uso)
-- [Contribuição](#contribuição)
-- [Licença](#licença)
+- [Configuração do Servidor Web](#configuração-do-servidor-web)
+- [Instalação do serviço](#instalação-do-serviço)
+- [Script de Monitoramento e Webhook via Discord](#script-de-monitoramento-e-webhook-via-discord)
+- [Script via Bash](#script-via-bash)
 
 
 # Objetivos
@@ -110,7 +111,7 @@ Para subir o servidor Nginx, foram realizados os seguintes passos com o usuário
 /var/www/html/
       ```
 
-  # Script de Monitoramento + Webhook via Discord
+  # Script de Monitoramento e Webhook via Discord
   ## Webhook no canal de texto do discord
   Para recebimento da notificação de monitoramento do site, foi criado um servidor no discord com um canal de texto para o alerta. Dentro destas configurações, no canal de texto foi criado um webhook em integrações do canal e gerado um link que será utilizado no scirpt.
 
