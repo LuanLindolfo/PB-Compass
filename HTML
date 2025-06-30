@@ -3,400 +3,415 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projeto Web Server - Luan Lindolfo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>Projeto Web Server na Nuvem - Luan Lindolfo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-color: #007bff; /* Azul moderno */
-            --secondary-color: #343a40; /* Cinza escuro */
-            --accent-color: #28a745; /* Verde para sucesso/online */
-            --warning-color: #dc3545; /* Vermelho para alerta/offline */
-            --text-color: #333;
-            --light-text-color: #f8f9fa; /* Branco levemente off-white */
-            --background-light: #f8f9fa; /* Fundo muito claro */
-            --background-dark: #212529; /* Fundo escuro */
+            --primary-color: #007bff;
+            --secondary-color: #343a40;
+            --accent-color: #28a745;
+            --light-text-color: #e9ecef;
+            --dark-text-color: #343a40;
+            --background-light: #f8f9fa;
+            --background-dark: #212529;
             --card-background: #ffffff;
-            --border-radius: 12px;
-            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
-            --transition-speed: 0.4s ease;
-            --nav-link-color: var(--secondary-color);
-            --nav-link-hover-color: var(--primary-color);
+            --border-radius: 10px;
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-dark: 0 6px 20px rgba(0, 0, 0, 0.2);
+            --transition-speed: 0.4s ease-in-out;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
             background-color: var(--background-light);
-            color: var(--text-color);
+            color: var(--dark-text-color);
             line-height: 1.6;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow-x: hidden; /* Evita rolagem horizontal indesejada */
-            text-rendering: optimizeLegibility; /* Melhor renderização de texto */
+            overflow-x: hidden;
         }
 
-        /* Fundo Interativo */
-        .interactive-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(0, 123, 255, 0.15), rgba(33, 37, 41, 0) 70%);
-            pointer-events: none; /* Permite que os cliques passem por ele */
-            transition: background 0.08s linear; /* Transição suave para o gradiente */
-            z-index: -1; /* Fica atrás de todo o conteúdo */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Hero Section (cabeçalho principal) */
-        .hero-section {
-            background-color: var(--primary-color);
-            color: var(--light-text-color);
-            padding: 6rem 2rem;
-            text-align: center;
-            box-shadow: var(--shadow-medium);
-            position: relative;
-            z-index: 1; /* Acima do fundo interativo */
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8) rotate(0deg); opacity: 0.5; }
+            50% { transform: scale(1.2) rotate(10deg); opacity: 0.7; }
+            100% { transform: scale(0.8) rotate(0deg); opacity: 0.5; }
+        }
+
+        @keyframes rotate-scale {
+            0% { transform: rotate(0deg) scale(0.8); }
+            50% { transform: rotate(10deg) scale(1.1); }
+            100% { transform: rotate(0deg) scale(0.8); }
+        }
+
+        nav {
+            background-color: var(--background-dark);
+            padding: 1rem 2rem;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-dark);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .logo {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
             align-items: center;
         }
 
-        .hero-section h1 {
+        nav .logo .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        nav ul {
+            list-style: none;
             margin: 0;
-            font-size: 3.5em; /* Aumentado para impacto */
-            font-weight: 900; /* Mais pesado para título */
-            letter-spacing: -1px;
-            line-height: 1.1;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 2.5rem;
+        }
+
+        nav ul li a, nav ul li button {
+            color: var(--light-text-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05em;
+            transition: color var(--transition-speed);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        nav ul li a:hover, nav ul li button:hover {
+            color: var(--primary-color);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--background-dark) 0%, #001f3f 100%);
+            color: var(--light-text-color);
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,123,255,0.1) 0%, transparent 70%);
+            animation: pulse 15s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        .hero-section h1 {
+            font-size: 3.8em;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            animation: slideInLeft 1s forwards;
+            opacity: 0;
         }
 
         .hero-section p {
             font-size: 1.4em;
-            margin-top: 1rem;
+            max-width: 800px;
+            margin: 0 auto 3rem auto;
             font-weight: 300;
-            max-width: 700px;
-            opacity: 0.9;
+            animation: slideInRight 1s forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
         }
 
         main {
-            flex-grow: 1;
-            padding: 3rem 1rem; /* Mais padding */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            position: relative;
-            z-index: 1; /* Acima do fundo interativo */
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .content-card {
+        section {
+            margin-bottom: 6rem;
             background-color: var(--card-background);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-light);
-            padding: 3rem; /* Mais padding */
-            max-width: 900px; /* Maior largura */
-            width: 95%;
+            padding: 3.5rem;
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        #about-project-section { animation-delay: 0.5s; }
+
+        section h2 {
+            font-size: 2.8em;
+            color: var(--secondary-color);
             text-align: center;
-            animation: fadeIn 1s ease-out;
-            position: relative; /* Para posicionar o indicador de status */
-            margin-bottom: 2rem; /* Espaço abaixo do cartão */
-        }
-
-        .content-card h2 {
-            color: var(--secondary-color);
-            font-size: 2.5em; /* Aumentado */
-            margin-bottom: 1.5rem;
+            margin-bottom: 3rem;
             font-weight: 700;
+            position: relative;
         }
 
-        .content-card p {
-            font-size: 1.15em; /* Ligeiramente maior */
-            margin-bottom: 1rem;
-            line-height: 1.7;
-            color: #555;
+        section h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            margin: 15px auto 0;
+            border-radius: 2px;
         }
 
-        .details {
-            margin-top: 2.5rem;
-            border-top: 1px solid #eee;
-            padding-top: 2rem;
-            display: flex; /* Usar flexbox para alinhar os detalhes */
+        #about-project-section .content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
             flex-direction: column;
-            gap: 10px; /* Espaçamento entre os parágrafos de detalhes */
-            align-items: center; /* Centralizar os itens na horizontal */
+            text-align: center;
         }
 
-        .details p {
-            font-weight: 400;
+        #about-project-section .text-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        #about-project-section .text-content p {
+            margin-bottom: 1.2rem;
+            font-size: 1.1em;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #about-project-section .status-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--background-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            font-size: 1.3em;
+            font-weight: 600;
             color: var(--secondary-color);
-            margin: 0; /* Remover margin padrão */
         }
 
-        .details p strong {
-            color: var(--primary-color);
-            font-weight: 700;
+        #about-project-section .status-info .icon {
+            font-size: 1.5em;
+            color: var(--accent-color);
+            animation: rotate-scale 2s infinite ease-in-out;
         }
 
-        /* Estilo para o link do GitHub com nome (Luan Lindolfo) */
-        .github-name-link {
-            color: var(--nav-link-color); /* Cor padrão dos links de navegação */
-            text-decoration: none; /* Remover sublinhado padrão */
-            font-weight: 400; /* Mantendo o peso normal para o nome */
-            transition: color var(--transition-speed), text-decoration var(--transition-speed);
-        }
-
-        .github-name-link:hover {
-            color: var(--nav-link-hover-color); /* Mudar cor no hover */
-            text-decoration: underline; /* Adicionar sublinhado no hover, como nos links de navegação */
-        }
-
-        /* Estilo para links GitHub gerais (botão e rodapé) */
-        .github-link {
-            color: var(--primary-color);
+        #about-project-section .project-button {
+            display: inline-block;
+            margin-top: 2.5rem;
+            padding: 1rem 2rem;
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
             text-decoration: none;
-            font-weight: 700;
-            transition: color var(--transition-speed);
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            box-shadow: var(--shadow-light);
         }
 
-        .github-link:hover {
-            color: var(--secondary-color);
-            text-decoration: underline;
-        }
-
-        .github-link i {
-            margin-right: 5px; /* Espaço entre o ícone e o texto */
+        #about-project-section .project-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
         }
 
         footer {
-            background-color: var(--background-dark);
+            background-color: var(--secondary-color);
             color: var(--light-text-color);
             text-align: center;
-            padding: 2rem 1rem; /* Mais padding */
-            font-size: 0.95em;
+            padding: 2rem 1rem;
+            font-size: 0.9em;
             box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1; /* Acima do fundo interativo */
+            margin-top: auto;
         }
 
         footer p {
             margin: 0.5rem 0;
-            opacity: 0.8;
         }
 
-        /* Botão de Exemplo (se quiser adicionar um CTA) */
-        .btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: #fff;
-            padding: 0.8rem 2rem;
-            border-radius: 50px; /* Mais arredondado */
+        .social-links {
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--light-text-color);
+            margin: 0 10px;
+            font-size: 1.2em;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1em;
-            transition: background-color var(--transition-speed), transform var(--transition-speed);
-            margin-top: 2rem;
+            transition: color var(--transition-speed), transform var(--transition-speed);
         }
 
-        .btn:hover {
-            background-color: #218838; /* Um verde um pouco mais escuro */
-            transform: translateY(-3px); /* Pequeno efeito de elevação */
+        .social-links a:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        /* Ajuste para o texto de acesso ao projeto no footer */
+        footer .github-link {
+            color: var(--primary-color); 
+            text-decoration: none; 
+            font-weight: 600;
+        }
+        footer .github-link:hover {
+            text-decoration: underline;
         }
 
-        /* Indicador de Status */
-        .status-indicator {
-            position: absolute;
-            top: 25px; /* Ajuste a posição vertical */
-            right: 25px; /* Ajuste a posição horizontal */
-            width: 25px; /* Ligeiramente maior */
-            height: 25px;
-            border-radius: 50%;
-            background-color: gray; /* Cor padrão antes de verificar */
-            border: 3px solid var(--card-background); /* Borda mais visível */
-            box-shadow: 0 0 8px rgba(0,0,0,0.4); /* Sombra mais acentuada */
-            animation: pulse 1.5s infinite; /* Efeito de pulsação */
-        }
-
-        .status-indicator.online {
-            background-color: var(--accent-color); /* Verde */
-        }
-
-        .status-indicator.offline {
-            background-color: var(--warning-color); /* Vermelho */
-        }
-
-        /* Keyframes para Animações */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* Media Queries para Responsividade Aprimorada */
         @media (max-width: 992px) {
             .hero-section h1 {
-                font-size: 2.8em;
+                font-size: 3em;
             }
             .hero-section p {
                 font-size: 1.2em;
             }
-            .content-card {
-                padding: 2.5rem;
-            }
-            .content-card h2 {
-                font-size: 2em;
-            }
-            .content-card p {
-                font-size: 1.1em;
-            }
-            .details {
-                align-items: flex-start; /* Em telas maiores, alinha à esquerda */
+            #about-project-section .content {
+                flex-direction: column;
             }
         }
 
         @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            nav ul {
+                margin-top: 1rem;
+                flex-direction: column;
+                align-items: center;
+            }
+            nav ul li {
+                margin: 0.5rem 0;
+            }
             .hero-section {
-                padding: 4rem 1.5rem;
+                padding: 6rem 1rem;
             }
             .hero-section h1 {
-                font-size: 2.4em;
+                font-size: 2.5em;
             }
             .hero-section p {
-                font-size: 1em;
+                font-size: 1.1em;
             }
-            .content-card {
+            main {
+                padding: 3rem 1rem;
+            }
+            section {
                 padding: 2rem;
+                margin-bottom: 4rem;
             }
-            .content-card h2 {
-                font-size: 1.8em;
+            section h2 {
+                font-size: 2.2em;
             }
-            .status-indicator {
-                top: 15px;
-                right: 15px;
-                width: 20px;
-                height: 20px;
-            }
-            .details {
-                align-items: flex-start; /* Mantém alinhamento à esquerda */
+            #about-project-section .status-info {
+                flex-direction: column;
+                gap: 10px;
             }
         }
 
         @media (max-width: 480px) {
-            .hero-section {
-                padding: 3rem 1rem;
-            }
             .hero-section h1 {
-                font-size: 1.8em;
+                font-size: 2em;
             }
             .hero-section p {
-                font-size: 0.9em;
-            }
-            .content-card {
-                padding: 1.5rem;
-            }
-            .content-card h2 {
-                font-size: 1.5em;
-            }
-            .content-card p {
-                font-size: 0.95em;
-            }
-            .details {
-                padding-top: 1rem;
-                align-items: flex-start; /* Mantém alinhamento à esquerda */
-            }
-            .btn {
-                padding: 0.7rem 1.5rem;
                 font-size: 1em;
             }
-            .status-indicator {
-                top: 10px;
-                right: 10px;
-                width: 15px;
-                height: 15px;
-                border-width: 2px;
+            section h2 {
+                font-size: 1.8em;
             }
         }
     </style>
 </head>
 <body>
-    <div class="interactive-bg"></div>
-
-    <header class="hero-section">
-        <h1>Projeto Web Server na Nuvem</h1>
-        <p>Desenvolvendo e monitorando sua presença online com Nginx e AWS.</p>
-        <a href="https://github.com/LuanLindolfo" target="_blank" class="btn">
-            <i class="fab fa-github"></i> Ver no GitHub
+    <nav>
+        <a href="#" class="logo">
+            <span class="icon"><i class="fas fa-server"></i></span> Projeto Web Server
         </a>
-    </header>
+        <ul>
+            <li><a href="#about-project-section">Sobre o Projeto</a></li>
+            <li>
+                <a href="https://www.linkedin.com/in/luan-lindolfo" target="_blank">Contato</a>
+            </li>
+        </ul>
+    </nav>
+
+    <section class="hero-section">
+        <h1>Projeto Web Server na Nuvem</h1>
+        <p>Desenvolvimento e monitoramento de funcionamento de site</p>
+    </section>
 
     <main>
-        <section class="content-card" id="about-project">
-            <div id="statusIndicator" class="status-indicator"></div>
-            <h2> O servidor está ON! 🚀✅ </h2>
-            <p>
-                Este é o resultado do projeto web server, uma iniciativa realizada para a turma PB Compass, focada em demonstrar a execução de atividades práticas em ambiente Linux, a utilização de utilitários essenciais, a configuração de um servidor web com Nginx e a estruturação de serviços na AWS. Um ambiente robusto e monitorado para sua aplicação.
-            </p>
-            <div class="details">
-                <p>Desenvolvido por: <strong><a href="https://github.com/LuanLindolfo" target="_blank" class="github-name-link">Luan Lindolfo</a></strong></p>
-                <p>Turma: <strong>PB - Compass</strong></p>
+        <section id="about-project-section">
+            <h2>Sobre o Projeto</h2>
+            <div class="content">
+                <div class="text-content">
+                    <p>Este é o resultado do projeto web server, uma iniciativa realizada para a turma PB Compass, focada em demonstrar a execução de atividades práticas em ambiente Linux, a utilização de ferramentas essenciais, a configuração de um servidor web com Nginx e a estruturação de serviços na AWS. Um ambiente robusto e monitorado para sua aplicação.</p>
+
+                    <div class="status-info">
+                        <span class="icon"><i class="fas fa-check-circle"></i></span>
+                        <span>O servidor está ONLINE!</span>
+                    </div>
+
+                    <a href="https://github.com/LuanLindolfo/PB-Compass" target="_blank" class="project-button">
+                        Acessar Diretório do Projeto <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 Projeto Web Server - Sprint 1. Todos os direitos reservados.</p>
-        <p>Criado com dedicação em Santa Izabel do Pará, Pará, Brasil.</p>
-        <p>Acesse o projeto no GitHub: <a href="https://github.com/LuanLindolfo" target="_blank" class="github-link"><i class="fab fa-github"></i> LuanLindolfo</a></p>
+        <p>&copy; 2025 Projeto Web Server - Luan Lindolfo. Todos os direitos reservados.</p>
+        <p>Acesse mais projetos em <a href="https://github.com/LuanLindolfo" target="_blank" class="github-link">Luan Lindolfo</a></p>
+        <div class="social-links">
+            <a href="https://linkedin.com/in/luan-lindolfo" target="_blank" aria-label="LinkedIn de Luan Lindolfo"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/LuanLindolfo" target="_blank" aria-label="GitHub de Luan Lindolfo"><i class="fab fa-github"></i></a>
+        </div>
     </footer>
 
     <script>
-        document.addEventListener('mousemove', function(e) {
-            const bg = document.querySelector('.interactive-bg');
-            const mouseX = (e.clientX / window.innerWidth) * 100;
-            const mouseY = (e.clientY / window.innerHeight) * 100;
-            bg.style.setProperty('--mouse-x', mouseX + '%');
-            bg.style.setProperty('--mouse-y', mouseY + '%');
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
-
-        const statusIndicator = document.getElementById('statusIndicator');
-
-        async function checkSiteStatus() {
-            try {
-                const response = await fetch('/', { method: 'GET', cache: 'no-store' });
-                if (response.ok) {
-                    statusIndicator.classList.remove('offline');
-                    statusIndicator.classList.add('online');
-                    statusIndicator.title = 'Site Online: Conectado com sucesso.';
-                } else {
-                    statusIndicator.classList.remove('online');
-                    statusIndicator.classList.add('offline');
-                    statusIndicator.title = `Site Offline: Resposta HTTP ${response.status}.`;
-                }
-            } catch (error) {
-                console.error('Erro ao verificar status do site (frontend):', error);
-                statusIndicator.classList.remove('online');
-                statusIndicator.classList.add('offline');
-                statusIndicator.title = 'Site Offline: Erro de conexão de rede.';
-            }
-        }
-
-        checkSiteStatus();
-        setInterval(checkSiteStatus, 5000);
     </script>
 </body>
 </html>
