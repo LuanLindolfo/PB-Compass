@@ -7,6 +7,7 @@
 - [Instalação do serviço](#instalação-do-serviço)
 - [Script de Monitoramento e Webhook via Discord](#script-de-monitoramento-e-webhook-via-discord)
 - [Script via Bash](#script-via-bash)
+- [Conclusão e melhorias futuras aplicáveis](#conclusão-e-melhorias-futuras-aplicáveis)
 
 
 # Objetivos
@@ -169,3 +170,6 @@ Para testagem do funcionamento do serviço, basta parar o nginx por meio do coma
    ```bash
   systemctl start nginx
   ```
+# **Conclusão e melhorias futuras aplicáveis**
+Com base em todo o documento explicativo, é evidente a possibilidade de utilização de serviço webhook integrado ao linux agindo como ferramenta essencial de monitoramento de site, podendo ser integrado também ao Telegram. Em uma análise profunda, é possível mirar em melhorias em base de processamento onde pode ser aplicado um user data que "transcreva" o HTML e o Script em conjunto com os comandos introduzidos no usar data para que seja injetado na máquina, ou que obtenha em seu escopo o HTML e o Script em caso de máquina nova, ao ser inicializado e, assim, podendo construir uma estrutura completa utilizando o Terraform, transformando-se um trabalho com maior alcance em automatização.
+
