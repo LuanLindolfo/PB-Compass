@@ -144,7 +144,7 @@ Após esse comando, basta implementar o script do melhor jeito com mensagens per
 
 * **Script executável**
     ```bash
-  chmod +x /usr/local/bin/monitorar_site.sh
+  chmod +x /usr/local/bin/monitoramentobin.sh
      ```
     Dessa forma, ao utilizar o  ```chmod ``` (Change Mode) as permissões do arquivo são alteradas em conjunto com o comando  ```+x ``` para que a permissão de execução seja aplicada, caso contrário, o script não irá funcionar como um programa executável.
 * **Utilizando o crontab para tempo de monitoramento**
