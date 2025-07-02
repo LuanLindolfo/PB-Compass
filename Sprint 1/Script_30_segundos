@@ -1,3 +1,5 @@
+#Script para fins de apresenta;'ao com agilidade no tempo em 30 segundos
+
 #!/bin/bash
 
 SITE_URL="http://localhost"
