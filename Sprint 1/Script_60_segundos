@@ -1,0 +1,47 @@
+#!/bin/bash
+
+SITE_URL="http://localhost"
+WEBHOOK_URL="" #-> URL de integração da Webhook
+LOG_FILE="/var/log/monitoramento_web/site_status.log"
+STATUS_FILE="/tmp/site_monitor_status"
+
+send_notification() {
+    MESSAGE="$1"
+    PAYLOAD="{\"content\": \"$MESSAGE\"}"
+    curl -m 10 -s -H "Content-Type: application/json" -X POST -d "$PAYLOAD" "$WEBHOOK_URL" > /dev/null
+}
+
+log_message() {
+    echo "$(date +"%Y-%m-%d %H:%M:%S") - $1" | sudo tee -a "$LOG_FILE" > /dev/null
+}
+
+check_site_status() {
+    HTTP_CODE=$(curl -s --max-time 10 -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
+
+    LAST_STATUS="UP"
+    if [ -f "$STATUS_FILE" ]; then
+        LAST_STATUS=$(cat "$STATUS_FILE")
+    fi
+
+    if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 301 ] || [ "$HTTP_CODE" -eq 302 ]; then
+        if [ "$LAST_STATUS" = "DOWN" ]; then
+            log_message "INFO: O site ($SITE_URL) voltou a ficar ONLINE. (HTTP Status: $HTTP_CODE)"
+            send_notification "O site esta ON novamente 😎✅"
+            echo "UP" | sudo tee "$STATUS_FILE" > /dev/null
+        else
+            log_message "INFO: O site ($SITE_URL) está ONLINE. (HTTP Status: $HTTP_CODE)"
+        fi
+    else
+        if [ "$LAST_STATUS" = "UP" ]; then
+            log_message "ALERTA: O site ($SITE_URL) está OFFLINE! (HTTP Status: $HTTP_CODE)"
+            send_notification "O site deu uma caída e tá OFF 😅❌"
+            echo "DOWN" | sudo tee "$STATUS_FILE" > /dev/null
+        else
+            log_message "ALERTA: O site ($SITE_URL) continua OFFLINE. (HTTP Status: $HTTP_CODE)"
+        fi
+    fi
+}
+
+check_site_status
+sleep 60
+check_site_status
