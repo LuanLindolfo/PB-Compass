@@ -108,5 +108,17 @@ Há quatro tipos de Load Balancers:
     - **Descontinuado em 2023** (não recomendado para novos usos).
     - Operava nas Camadas 4 e 7.
 
- Para a aplicação, o Load Balancer
+ Para a aplicação, o Load Balancer teve como configuração a opção 'Voltado para a Internet' com IPv4 atrelado à VPC do trabalho. Em seguida, selecionado e inserido nas zonas em que as subredes públicas estão e sendo associado a elas sendo selecionado o grupo de segurança do serviço load balancer com o Listeners e roteamento tendo um grupo selecionado para a verificação de solicitação de conexão.
+
+ ## Grupo de segurança Load Balancer
+ No grupo de segurança criado para o serviço do Load Balancer, foram colocadas as regras de entrada:
+ 1. HTTP na porta 80 com IP qualquer/IP do host
+ 2. HTTPS na porta 443 com IP qualquer/IP do host
+
+Enquanto a regra de saída é permitida todo o acesso IPv4 com o IP qualquer/IP do host.
+
+## Listeners e roteamento
+Para que ocorra a verificação de solicitação de conexão, o grupo de destino dos Listeners e roteamento é criado com a porta configurada. Nesse caso, foi selecionado o HTTP na porta 80 com protocolo HTTP1 na configuração básica de instância
+
+
 # Funcionalidade - Auto Scaling Group
