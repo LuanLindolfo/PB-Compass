@@ -136,3 +136,6 @@ O Load Balancer monitora a saúde das instâncias e notifica o Auto Scaling para
 - Durante picos de demanda, o Auto Scaling lança novas instâncias que são imediatamente incorporadas na distribuição de carga pelo Load Balancer, prevenindo sobrecargas
 - Em períodos de baixa demanda, o Auto Scaling remove instâncias excedentes para otimização de custos
 
+Na aplicação, o modelo de execução (configurado para a criação da EC2) é selecionado. Esse modelo inclui o user data (com instalação do Docker, WordPress, Apache, PHP, MySQL e outros comandos), as tags e a configuração completa da EC2 para criação. Na aba de rede, a instância é associada às subredes privadas, conforme solicitado no projeto. Em seguida, é anexada a um balanceador de carga existente, selecionando-se o Load Balancer criado anteriormente. Para o grupo de destino, a opção de verificação de integridade do Elastic Load Balancing é ativada para monitoramento das instâncias.
+
+A capacidade desejada varia conforme o uso. Neste caso, foi definida como 1, com escalabilidade de capacidade mínima e máxima em 1 e 2, respectivamente (para desativar o auto scaling, defina todas as capacidades como 0). A política de dimensionamento com monitoramento de métricas está ativada para ajuste proporcional da escala e da capacidade desejada.
