@@ -41,6 +41,16 @@ A tabela de rotas é o elemento principal que define uma sub-rede como pública 
 
 - Privada: Contém a rota local e a rota para o NAT Gateway. Este, por sua vez, é associado à internet através de uma sub-rede pública e utiliza um IP elástico (IP público fixo). Essa configuração oferece gerenciamento simplificado, garantindo que o NAT Gateway tenha um endereço IP público estável e persistente. Como o retorno do tráfego não é diretamente acessível (apenas o NAT Gateway conhece o destino interno), as sub-redes privadas permanecem seguras.
 
+No grupo de segurança foram implantadas as regras de entrada:
+1. Todo o acesso IPv4 com o IP qualquer/IP do host 
+2. HTTP na porta 80 com IP qualquer/IP do host
+3. HTTPS na porta 443 com IP qualquer/IP do host
+4. SSH na porta 22 com IP qualquer/IP do host
+5. MYSQL na porta 3306 com IP qualquer/IP do host
+
+É importante ressaltar que o IP qualquer pode ser implantado para a finalidade da agilidade no processo visando a mudança de IP da máquina local, mas para melhor segurança, impôr o IP da máquina de acesso/host se torna a prática de segurança mais importante.
+
+Na regra de saída, é permitido todo o acesso IPv4 com o IP qualquer/IP do host.
 # Funcionalidade - RDS
 O RDS é um serviço gerenciado de banco de dados relacional que suporta SQL (PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, DB2). Este serviço permite:
 
@@ -52,6 +62,16 @@ O RDS é um serviço gerenciado de banco de dados relacional que suporta SQL (Po
 
 4. Otimização: Adequa os recursos e configurações do banco de dados às necessidades específicas da aplicação.
 
+Na aplicação, foi criado um banco de dados MySQL na versão mais recente (8.4.6) no modelo de nível gratuito e consequentemnet a aplicação Single-AZ. O user e a senha foram criados com gerenciamento de credenciais autogerenciado com os recursos dr.t3.micro e armazenamento padrão.
+A conectividade do RDS foi selecionado para se conectar à EC2, logo, o RDS irá se conectar aos recursos da EC2 ativa tendo contato direto como desejado na aplicação. O tipo de rede em ipv4 e o grupo de segurança selecionado ao que foi ajustado para a aplicação do banco de dados e com a seleção da zona de disponibilidado de RDS.
+
+O RDS foi aplicado em cada zona de disponibilidade onde se conecta à todas as subredes privadas.
+
+## Grupo de segurança RDS
+O grupo de segurança do RDS foi criado para a finalidade de conexão com a EC2 somente ouvindo-a. Logo, o grupo de segurança do RDS tem como regras de entrada:
+1. MYSQL na porta 3306 com IP qualquer/IP do host
+
+Na regra de saída, é permitido todo o acesso IPv4 com o IP qualquer/IP do host.
 # Funcionalidade - EFS
 O EFS é um serviço de armazenamento em rede totalmente gerenciado e Multi-AZ (implantado em múltiplas zonas de disponibilidade dentro da mesma região). Ele utiliza o protocolo NFSv4, montado no diretório /opt/data das instâncias EC2.
 
@@ -65,3 +85,28 @@ Sua arquitetura garante alta disponibilidade:
 
 ## NFS
 O NFS é o protocolo utilizado pelo EFS. Nesse modelo, o NFS define um serviço como servidor, nesse caso, o EFS atua como servidor (fonte central dos arquivos), enquanto as instâncias EC2 funcionam como clientes que acessam esses arquivos. Essa arquitetura permite múltiplos acessos simultâneos ao mesmo arquivo, otimizando o acesso em tempo real inclusive durante atualizações. Quando uma instância EC2 monta o EFS via protocolo NFS, ela envia comandos para acessar os arquivos do servidor EFS, disponibilizando-os localmente no sistema, no diretório /mnt/efs.
+
+## EFS via user data com protocolo NFS
+
+# Funcionalidade - Load Balancer
+O Load Balancer é um serviço que forne o balanceamento de carga entre as aplicações com vantagens aplicadas como o Gerenciamento da AWS (onde a AWS trata a manutenção, upgrades, funcionalidade e a alta disponibilidade), facilidade de Configuração por meio de poucas opções de configuração para simplificar o uso, e custo benefício reduzindo significativamente o esforço de manutenção e integração por parte do usuário. O Load Balancer trata um tópico importante sendo ele: Escabilidade Vertical (aumentando o poder computacional de uma instância) e Horizontal (aumentar o número de instâncias ou sistemas para sua aplicação.)
+
+Há quatro tipos de Load Balancers:
+- **Application Load Balancer (ALB):**
+    - Opera na **Camada 7 (HTTP / HTTPS)**.
+    - Ideal para aplicações web e microsserviços.
+      
+ - **Network Load Balancer (NLB):**
+    - Opera na **Camada 4 (TCP / UDP)**.3
+    - Oferece **ultra-alta performance** e baixa latência.
+      
+- **Gateway Load Balancer (GLB):**
+    - Opera na **Camada 3 (IP)**.
+    - Usado para implantar e dimensionar appliances de rede de terceiros.
+
+- **Classic Load Balancer (CLB):**
+    - **Descontinuado em 2023** (não recomendado para novos usos).
+    - Operava nas Camadas 4 e 7.
+
+ Para a aplicação, o Load Balancer
+# Funcionalidade - Auto Scaling Group
