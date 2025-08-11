@@ -122,3 +122,17 @@ Para que ocorra a verificação de solicitação de conexão, o grupo de destino
 
 
 # Funcionalidade - Auto Scaling Group
+O Auto Scaling permite que aplicações se ajustem à demanda operando com capacidade ideal para economia de custos. Ele adiciona ou remove instâncias automaticamente conforme o aumento ou redução da carga, mantendo sempre o número mínimo e máximo de instâncias em funcionamento. Há também a realização da substituição automática de instâncias não saudáveis. Quando integrado ao Load Balancer, o sistema ganha maior eficiência:
+
+- O Load Balancer recebe o tráfego da aplicação e distribui pelas instâncias ativas
+
+- O Auto Scaling gerencia dinamicamente o número de instâncias:
+
+- Adiciona novas instâncias quando criadas
+
+- Remove instâncias encerradas
+
+O Load Balancer monitora a saúde das instâncias e notifica o Auto Scaling para acionar substituições em caso de falha. Essa parceria garante adaptação contínua ao tráfego:
+- Durante picos de demanda, o Auto Scaling lança novas instâncias que são imediatamente incorporadas na distribuição de carga pelo Load Balancer, prevenindo sobrecargas
+- Em períodos de baixa demanda, o Auto Scaling remove instâncias excedentes para otimização de custos
+
