@@ -1,0 +1,158 @@
+#!/bin/bash
+
+sudo su
+
+# =========================================================================
+# Script de User Data para implantação de WordPress com Docker e EFS
+# Plataforma: Ubuntu
+# =========================================================================
+
+# --- CONFIGURAÇÃO ---
+# Por favor, ajuste estes valores para o seu ambiente.
+EFS_ID="fs-0f4a729fb3617ad0d" 
+AWS_REGION="us-east-1"
+MOUNT_POINT="/mnt/efs"
+PROJECT_DIR="/home/ubuntu/wordpress-app"
+DOCKER_COMPOSE_VERSION="v2.28.1"
+LOG_FILE="/var/log/startup.log"
+
+# Redireciona toda a saída do script para o arquivo de log para facilitar o debug
+exec > >(tee -a "$LOG_FILE"|logger -t user-data -s 2>/dev/console) 2>&1
+echo "Iniciando script de user data para EFS e Docker..."
+
+# --- 1. Montagem Robusta do EFS ---
+# O EFS deve ser montado antes que o Docker possa usar seus volumes.
+
+EFS_DNS_NAME="$EFS_ID.efs.$AWS_REGION.amazonaws.com"
+FSTAB_ENTRY="$EFS_DNS_NAME:/ $MOUNT_POINT nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0"
+
+echo "Atualizando pacotes e instalando cliente NFS..."
+apt-get update -y
+apt-get install -y nfs-common || { echo "ERRO: Falha na instalação de nfs-common."; exit 1; }
+echo "Cliente NFS instalado."
+
+echo "Criando o diretório de montagem '$MOUNT_POINT'..."
+mkdir -p "$MOUNT_POINT"
+
+echo "Tentando montar o EFS '$EFS_DNS_NAME'..."
+MAX_RETRIES=5
+RETRY_COUNT=0
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    if mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport "$EFS_DNS_NAME":/ "$MOUNT_POINT"; then
+        echo "SUCESSO: EFS montado com sucesso!"
+        break
+    else
+        RETRY_COUNT=$((RETRY_COUNT+1))
+        echo "Falha na montagem. Tentativa $RETRY_COUNT de $MAX_RETRIES. Aguardando 10 segundos..."
+        sleep 10
+    fi
+done
+
+if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+    echo "ERRO: Falha na montagem do EFS após $MAX_RETRIES tentativas. Abortando."
+    exit 1
+fi
+
+echo "Adicionando a entrada no /etc/fstab para montagem persistente..."
+if ! grep -q "$EFS_ID" /etc/fstab; then
+    echo "$FSTAB_ENTRY" >> /etc/fstab
+    echo "Entrada adicionada ao /etc/fstab."
+fi
+
+echo "Configurando permissões no diretório do EFS..."
+mkdir -p "$MOUNT_POINT/wordpress-data"
+chown -R ubuntu:ubuntu "$MOUNT_POINT/wordpress-data"
+chmod -R 775 "$MOUNT_POINT/wordpress-data"
+
+# --- 2. Instalação e Implantação do Docker (Robusto) ---
+echo "Instalando Docker, Docker Compose e Git..."
+apt-get install -y ca-certificates curl gnupg lsb-release git || { echo "ERRO: Falha na instalação de dependências."; exit 1; }
+
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  \"$(. /etc/os-release && echo \"$VERSION_CODENAME\")\" stable" | \
+  tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+apt-get update -y
+apt-get install -y docker-ce docker-ce-cli containerd.io || { echo "ERRO: Falha na instalação do Docker."; exit 1; }
+
+usermod -aG docker ubuntu
+
+echo "Iniciando e aguardando o daemon do Docker..."
+systemctl start docker
+systemctl enable docker
+RETRY_COUNT=0
+MAX_RETRIES=12
+while ! docker info >/dev/null 2>&1 && [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    echo "Aguardando o Docker daemon... ($((RETRY_COUNT * 5))s)"
+    sleep 5
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+done
+
+if ! docker info >/dev/null 2>&1; then
+    echo "ERRO: O daemon do Docker não iniciou após 60 segundos. Abortando."
+    exit 1
+fi
+echo "Docker daemon está pronto."
+
+echo "Baixando e instalando o Docker Compose (versão $DOCKER_COMPOSE_VERSION)..."
+curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || { echo "ERRO: Falha ao baixar Docker Compose."; exit 1; }
+chmod +x /usr/local/bin/docker-compose
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+# --- 3. Criação do diretório e dos arquivos ---
+echo "Preparando o ambiente do projeto no diretório '$PROJECT_DIR'..."
+mkdir -p "$PROJECT_DIR"
+cd "$PROJECT_DIR"
+chown -R ubuntu:ubuntu "$PROJECT_DIR"
+
+cat << 'EOT' > Dockerfile
+FROM wordpress:latest
+RUN echo "Construindo imagem customizada do WordPress..."
+EOT
+
+cat << EOF > docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: wordpress_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Luan121.
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: lindolfo
+      MYSQL_PASSWORD: Luan121.
+    volumes:
+      - db_data:/var/lib/mysql
+
+  wordpress:
+    build: .
+    container_name: wordpress_app
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: lindolfo
+      WORDPRESS_DB_PASSWORD: Luan121.
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - $MOUNT_POINT/wordpress-data:/var/www/html
+
+volumes:
+  db_data:
+EOF
+
+# --- 4. Executar o Docker Compose ---
+echo "Construindo a imagem e iniciando os contêineres..."
+sudo -u ubuntu docker-compose up -d --build || { echo "ERRO: Falha ao executar docker-compose."; exit 1; }
+
+echo "--- FIM DO SCRIPT ---"
+echo "Implantação do WordPress com EFS concluída. Verifique os logs em '$LOG_FILE'."
