@@ -1,0 +1,32 @@
+docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: wordpress_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Luan121.
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: lindolfo
+      MYSQL_PASSWORD: Luan121.
+    volumes:
+      - db_data:/var/lib/mysql
+
+  wordpress:
+    build: .
+    container_name: wordpress_app
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: lindolfo
+      WORDPRESS_DB_PASSWORD: Luan121.
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - $MOUNT_POINT/wordpress-data:/var/www/html
+
+volumes:
+  db_data:
