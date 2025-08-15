@@ -7,6 +7,7 @@
 - [Security Group](#security-group)
 
 ## Tecnologias Utilizadas
+![WordPress](https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![Docker Hub](https://img.shields.io/badge/Docker_Hub-000000?style=for-the-badge&logo=docker&logoColor=white)
 ![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
@@ -15,6 +16,13 @@
 ![Rancher](https://img.shields.io/badge/Rancher-0075A8?style=for-the-badge&logo=rancher&logoColor=white)
 ![Windows](https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-121011?style=for-the-badge&logo=gnu-bash&logoColor=white)
+![User Data](https://img.shields.io/badge/User_Data-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Amazon EC2](https://img.shields.io/badge/Amazon_EC2-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Amazon RDS](https://img.shields.io/badge/Amazon_RDS-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Amazon EFS](https://img.shields.io/badge/Amazon_EFS-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Load Balancing](https://img.shields.io/badge/Load_Balancing-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Amazon Auto Scaling](https://img.shields.io/badge/Amazon_Auto_Scaling-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
 
 # Objetivos
