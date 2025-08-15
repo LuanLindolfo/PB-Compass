@@ -57,6 +57,7 @@ No grupo de segurança foram implantadas as regras de entrada:
 É importante ressaltar que o IP qualquer pode ser implantado para a finalidade da agilidade no processo visando a mudança de IP da máquina local, mas para melhor segurança, impôr o IP da máquina de acesso/host se torna a prática de segurança mais importante.
 
 Na regra de saída, é permitido todo o acesso IPv4 com o IP qualquer/IP do host.
+
 ## Funcionalidade - RDS
 O RDS é um serviço gerenciado de banco de dados relacional que suporta SQL (PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, DB2). Este serviço permite:
 
@@ -78,8 +79,9 @@ O grupo de segurança do RDS foi criado para a finalidade de conexão com a EC2 
 1. MYSQL na porta 3306 com IP qualquer/IP do host
 
 Na regra de saída, é permitido todo o acesso IPv4 com o IP qualquer/IP do host.
+
 ## Funcionalidade - EFS
-O EFS é um serviço de armazenamento em rede totalmente gerenciado e Multi-AZ (implantado em múltiplas zonas de disponibilidade dentro da mesma região). Ele utiliza o protocolo NFSv4, montado no diretório /opt/data das instâncias EC2.
+O EFS é um serviço de armazenamento em rede totalmente gerenciado e Multi-AZ (implantado em múltiplas zonas de disponibilidade dentro da mesma região). Ele utiliza o protocolo NFSv4, montado no diretório /opt/data das instâncias EC2. Na aplicação atual, ele teve a montagem em outro diretório conforme atestado via user data.
 
 Sua arquitetura garante alta disponibilidade:
 
@@ -88,6 +90,8 @@ Sua arquitetura garante alta disponibilidade:
 2. Tolerância a falhas: Se uma instância EC2 falhar, as demais mantêm acesso ininterrupto aos arquivos no EFS.
 
 3. Independência de instâncias: O sistema de arquivos não depende do estado de instâncias individuais para funcionar — permanece disponível mesmo que todas as instâncias associadas sejam desativadas.
+
+Na aplicação do Wordpress, o EFS foi aplicado nas 4 subredes privadas e alocado apenas no grupo de segurança do EFS-NFS em cada subrede.
 
 ### NFS
 O NFS é o protocolo utilizado pelo EFS. Nesse modelo, o NFS define um serviço como servidor, nesse caso, o EFS atua como servidor (fonte central dos arquivos), enquanto as instâncias EC2 funcionam como clientes que acessam esses arquivos. Essa arquitetura permite múltiplos acessos simultâneos ao mesmo arquivo, otimizando o acesso em tempo real inclusive durante atualizações. Quando uma instância EC2 monta o EFS via protocolo NFS, ela envia comandos para acessar os arquivos do servidor EFS, disponibilizando-os localmente no sistema, no diretório /mnt/efs.
