@@ -9,8 +9,8 @@ sudo su
 
 # --- CONFIGURAÇÃO ---
 # Por favor, ajuste estes valores para o seu ambiente.
-EFS_ID="fs-0f4a729fb3617ad0d" 
-AWS_REGION="us-east-1"
+EFS_ID="(Id do seu EFS)"
+AWS_REGION="(região de atuação)"
 MOUNT_POINT="/mnt/efs"
 PROJECT_DIR="/home/ubuntu/wordpress-app"
 DOCKER_COMPOSE_VERSION="v2.28.1"
@@ -23,7 +23,7 @@ echo "Iniciando script de user data para EFS e Docker..."
 # --- 1. Montagem Robusta do EFS ---
 # O EFS deve ser montado antes que o Docker possa usar seus volumes.
 
-EFS_DNS_NAME="$EFS_ID.efs.$AWS_REGION.amazonaws.com"
+EFS_DNS_NAME="(Dns name do EFS)"
 FSTAB_ENTRY="$EFS_DNS_NAME:/ $MOUNT_POINT nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0"
 
 echo "Atualizando pacotes e instalando cliente NFS..."
