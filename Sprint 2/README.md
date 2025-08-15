@@ -4,7 +4,9 @@
 - [Objetivos](#objetivos)
 - [Componentes](#componentes)
 - [Funcionalidade](#funcionalidade)
+- [Security Group](#security-group)
 
+# Tecnologias utilizadas
 
 # Objetivos
 ## O presente projeto trata-se de uma aplicação prática de conhecimentos adquiridos na trilha DevSecOps do programa de bolsas da Compass. Dessa forma, a documentação se faz crucial para a aplicação dos conhecimentos adquiridos e do projeto proposto
@@ -141,8 +143,13 @@ O bastion atua como ponto intermediário de segurança para uma aplicação segu
 
 ### Bastian na aplicação do Wordpress (comandos)
 Nesta aplicação, para que o bastian acesse a subrede privada, foi estabelecido o comando até a chave .pem que acessa a subrede privada e foi aplicados os comandos:
-'' Bash
-''
+    ```bash
+"eval (ssh-agent -c)"
+ssh-add chave.pem
+ssh -A -i "tuachave.pem" ubuntu@ip_publico_bastion
+ssh ubuntu@ip_privado_subrede_privada
+    ```
+Observação: Há casos em que no user root pode dar falha
 
 ## Security Group
 O Security Group é um componente em escala de EC2 que serve como firewall para entrada e saída permitindo tráfego em nível de IP. Dentro do projeto, foi arquitetado para cada componente que faz parte da aplicação do Wordpress.
@@ -208,9 +215,14 @@ O Security Group é um componente em escala de EC2 que serve como firewall para 
 | Todo o tráfego  | Tudo  | 0.0.0.0/0  |
 
 
-Dessa forma, o security group fará as devidas comunicações. Elas se estruturam em:
-EC2 terá o tráfego necessário: Aplicação HTTP onde ouvirá essa porta para o tráfego à aplicação do Wordpress na rede, SSH diretamente do Bastian que irá intercorrer a conexão à rede privada para que seja iniciado o User Data e seja possível conectar à internet (em conjunto com o NAT atrelado à rede privada)e MYSQL/Aurora com a permissão para conexão do banco de dados e todos os registros aplicados, na saída terá o tráfego de dados ao EFS por meio do protocolo utilizado (NFS).
-EFS terá o tráfego necessário: Entrada NFS com o tráfego de dados que chega até o mesmo, permitindo a ligação com as regiões sem correr o risco de perca total dos dados, com saída permitindo o tráfego dos dados.
-RDS terá o tráfego necessário para ouvir apenas os dados do EC2 conforme solicitado no projeto.
-Bastion terá o tráfego necessário para a conexão com a subrede privada a qual terá a aplicação do docker e wordpress via user data sendo possível se conectar pelo ip privado da subrede e o ip público do bastion.
-Em caso de ocorrer algum erro no security group que não seja possível encontrar, é possível permitir todo o tráfego para averiguar o tráfego e as permissões erôneas.
+O security group fará as devidas comunicações, que se estruturam em:
+
+EC2: O tráfego necessário incluirá a aplicação HTTP, onde ouvirá essa porta para o tráfego da aplicação do WordPress na rede. O SSH será diretamente do Bastion, que fará a conexão com a rede privada para que o User Data seja iniciado e seja possível conectar à internet (em conjunto com o NAT atrelado à rede privada). O MySQL/Aurora terá a permissão para conexão com o banco de dados e todos os registros aplicados. Na saída, haverá o tráfego de dados para o EFS por meio do protocolo utilizado (NFS).
+
+EFS: O tráfego necessário terá a entrada NFS com o tráfego de dados que chega até ele, permitindo a ligação com as regiões sem o risco de perda total dos dados, com saída permitindo o tráfego dos dados.
+
+RDS: O tráfego necessário será para ouvir apenas os dados do EC2, conforme solicitado no projeto.
+
+Bastion: O tráfego necessário será para a conexão com a sub-rede privada, que terá a aplicação do Docker e WordPress via User Data, sendo possível se conectar pelo IP privado da sub-rede e pelo IP público do Bastion.
+
+Em caso de algum erro no security group que não seja possível encontrar, é possível permitir todo o tráfego para averiguar as permissões errôneas.
