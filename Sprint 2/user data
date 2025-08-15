@@ -2,13 +2,9 @@
 
 sudo su
 
-# =========================================================================
-# Script de User Data para implantação de WordPress com Docker e EFS
-# Plataforma: Ubuntu
-# =========================================================================
+# User Data para implantação de WordPress com Docker e EFS no Ubuntu em uma EC2
 
-# --- CONFIGURAÇÃO ---
-# Por favor, ajuste estes valores para o seu ambiente.
+# valores que tem que adaptar para cada aplicação
 EFS_ID="(Id do seu EFS)"
 AWS_REGION="(região de atuação)"
 MOUNT_POINT="/mnt/efs"
@@ -16,12 +12,11 @@ PROJECT_DIR="/home/ubuntu/wordpress-app"
 DOCKER_COMPOSE_VERSION="v2.28.1"
 LOG_FILE="/var/log/startup.log"
 
-# Redireciona toda a saída do script para o arquivo de log para facilitar o debug
+#mandando a saída do script para o arquivo de log para facilitar o debug
 exec > >(tee -a "$LOG_FILE"|logger -t user-data -s 2>/dev/console) 2>&1
 echo "Iniciando script de user data para EFS e Docker..."
 
-# --- 1. Montagem Robusta do EFS ---
-# O EFS deve ser montado antes que o Docker possa usar seus volumes.
+# EFS antes do docker pra usar os volumes
 
 EFS_DNS_NAME="(Dns name do EFS)"
 FSTAB_ENTRY="$EFS_DNS_NAME:/ $MOUNT_POINT nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0"
@@ -65,7 +60,7 @@ mkdir -p "$MOUNT_POINT/wordpress-data"
 chown -R ubuntu:ubuntu "$MOUNT_POINT/wordpress-data"
 chmod -R 775 "$MOUNT_POINT/wordpress-data"
 
-# --- 2. Instalação e Implantação do Docker (Robusto) ---
+# Docker
 echo "Instalando Docker, Docker Compose e Git..."
 apt-get install -y ca-certificates curl gnupg lsb-release git || { echo "ERRO: Falha na instalação de dependências."; exit 1; }
 
@@ -105,7 +100,7 @@ curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VE
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-# --- 3. Criação do diretório e dos arquivos ---
+# Diretório
 echo "Preparando o ambiente do projeto no diretório '$PROJECT_DIR'..."
 mkdir -p "$PROJECT_DIR"
 cd "$PROJECT_DIR"
@@ -125,10 +120,10 @@ services:
     container_name: wordpress_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: Luan121.
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: lindolfo
-      MYSQL_PASSWORD: Luan121.
+      MYSQL_ROOT_PASSWORD: user_root
+      MYSQL_DATABASE: nome_do_bd
+      MYSQL_USER: user_do_bd
+      MYSQL_PASSWORD: senha_do_user
     volumes:
       - db_data:/var/lib/mysql
 
@@ -140,9 +135,9 @@ services:
       - "80:80"
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: lindolfo
-      WORDPRESS_DB_PASSWORD: Luan121.
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: user_do_bd_inserido_aqui
+      WORDPRESS_DB_PASSWORD: senha_do_bd
+      WORDPRESS_DB_NAME: nome_do_bd
     volumes:
       - $MOUNT_POINT/wordpress-data:/var/www/html
 
@@ -150,7 +145,7 @@ volumes:
   db_data:
 EOF
 
-# --- 4. Executar o Docker Compose ---
+# Rodando o Docker Compose
 echo "Construindo a imagem e iniciando os contêineres..."
 sudo -u ubuntu docker-compose up -d --build || { echo "ERRO: Falha ao executar docker-compose."; exit 1; }
 
