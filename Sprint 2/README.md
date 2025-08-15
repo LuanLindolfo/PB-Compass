@@ -90,8 +90,6 @@ Sua arquitetura garante alta disponibilidade:
 ### NFS
 O NFS é o protocolo utilizado pelo EFS. Nesse modelo, o NFS define um serviço como servidor, nesse caso, o EFS atua como servidor (fonte central dos arquivos), enquanto as instâncias EC2 funcionam como clientes que acessam esses arquivos. Essa arquitetura permite múltiplos acessos simultâneos ao mesmo arquivo, otimizando o acesso em tempo real inclusive durante atualizações. Quando uma instância EC2 monta o EFS via protocolo NFS, ela envia comandos para acessar os arquivos do servidor EFS, disponibilizando-os localmente no sistema, no diretório /mnt/efs.
 
-### EFS via user data com protocolo NFS
-
 ## Funcionalidade - Load Balancer
 O Load Balancer é um serviço que forne o balanceamento de carga entre as aplicações com vantagens aplicadas como o Gerenciamento da AWS (onde a AWS trata a manutenção, upgrades, funcionalidade e a alta disponibilidade), facilidade de Configuração por meio de poucas opções de configuração para simplificar o uso, e custo benefício reduzindo significativamente o esforço de manutenção e integração por parte do usuário. O Load Balancer trata um tópico importante sendo ele: Escabilidade Vertical (aumentando o poder computacional de uma instância) e Horizontal (aumentar o número de instâncias ou sistemas para sua aplicação.)
 
@@ -114,16 +112,10 @@ Há quatro tipos de Load Balancers:
 
  Para a aplicação, o Load Balancer teve como configuração a opção 'Voltado para a Internet' com IPv4 atrelado à VPC do trabalho. Em seguida, selecionado e inserido nas zonas em que as subredes públicas estão e sendo associado a elas sendo selecionado o grupo de segurança do serviço load balancer com o Listeners e roteamento tendo um grupo selecionado para a verificação de solicitação de conexão.
 
- ### Grupo de segurança Load Balancer
- No grupo de segurança criado para o serviço do Load Balancer, foram colocadas as regras de entrada:
- 1. HTTP na porta 80 com IP qualquer/IP do host
- 2. HTTPS na porta 443 com IP qualquer/IP do host
-
-Enquanto a regra de saída é permitida todo o acesso IPv4 com o IP qualquer/IP do host.
-
 ### Listeners e roteamento
 Para que ocorra a verificação de solicitação de conexão, o grupo de destino dos Listeners e roteamento é criado com a porta configurada. Nesse caso, foi selecionado o HTTP na porta 80 com protocolo HTTP1 na configuração básica de instância
 
+É válido lembrar que o Load Balancer é adaptado para compreender o sinal da apicação e compreender o bem estar dentro da margem do código, nessa caso, atua como 200 - 399.
 
 ## Funcionalidade - Auto Scaling Group
 O Auto Scaling permite que aplicações se ajustem à demanda operando com capacidade ideal para economia de custos. Ele adiciona ou remove instâncias automaticamente conforme o aumento ou redução da carga, mantendo sempre o número mínimo e máximo de instâncias em funcionamento. Há também a realização da substituição automática de instâncias não saudáveis. Quando integrado ao Load Balancer, o sistema ganha maior eficiência:
@@ -143,3 +135,82 @@ O Load Balancer monitora a saúde das instâncias e notifica o Auto Scaling para
 Na aplicação, o modelo de execução (configurado para a criação da EC2) é selecionado. Esse modelo inclui o user data (com instalação do Docker, WordPress, Apache, PHP, MySQL e outros comandos), as tags e a configuração completa da EC2 para criação. Na aba de rede, a instância é associada às subredes privadas, conforme solicitado no projeto. Em seguida, é anexada a um balanceador de carga existente, selecionando-se o Load Balancer criado anteriormente. Para o grupo de destino, a opção de verificação de integridade do Elastic Load Balancing é ativada para monitoramento das instâncias.
 
 A capacidade desejada varia conforme o uso. Neste caso, foi definida como 1, com escalabilidade de capacidade mínima e máxima em 1 e 2, respectivamente (para desativar o auto scaling, defina todas as capacidades como 0). A política de dimensionamento com monitoramento de métricas está ativada para ajuste proporcional da escala e da capacidade desejada.
+
+## Funcionalidade - Bastion Host
+O bastion atua como ponto intermediário de segurança para uma aplicação segura, neste caso uma rede privada. Todas as conexões remotas devem passar por ele. A aplicação fica visível apenas para o Bastion Host, deixando assim o controle da aplicação menos vulnerável e mais centralizado, facilitando o monitoramento e aumentando a segurança contra ataques. É importante lembrar que o bastion pode ser configurado para uma autenticação de dois fatores.
+
+### Bastian na aplicação do Wordpress (comandos)
+Nesta aplicação, para que o bastian acesse a subrede privada, foi estabelecido o comando até a chave .pem que acessa a subrede privada e foi aplicados os comandos:
+'' Bash
+''
+
+## Security Group
+O Security Group é um componente em escala de EC2 que serve como firewall para entrada e saída permitindo tráfego em nível de IP. Dentro do projeto, foi arquitetado para cada componente que faz parte da aplicação do Wordpress.
+
+### Security Group - EC2
+#### **Inbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| SSH  | 22  | ID do Security Group do Bastian  |
+| MYSQL/Aurora  | 3306  | 0.0.0.0/0  |
+| HTTP  | 80  | ID do Security Group do Load Balancer  |
+
+
+#### **Outbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| Todo o tráfego  | Tudo  | 0.0.0.0/0  |
+| NFS  | 2049  | 0.0.0.0/0  |
+
+### Security Group - Load Balancer
+#### **Inbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| HTTP  | 80  | 0.0.0.0/0  |
+| HTTPS  | 443  | 0.0.0.0/0  |
+
+#### **Outbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| Todo o tráfego  | Tudo  | 0.0.0.0/0  |
+
+### Security Group - EFS
+#### **Inbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| NFS  | 2049  | ID do Security Group da EC2  |
+
+#### **Outbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| Todo o tráfego  | Tudo  | 0.0.0.0/0  |
+
+### Security Group - Bastion
+#### **Inbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| SSH  | 22  | IP local da máquina de atuação  |
+
+#### **Outbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| Todo o tráfego  | Tudo  | 0.0.0.0/0  |
+
+### Security Group - RDS
+#### **Inbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| MYSQL/Aurora  | 3306  | ID do Security Group da EC2  |
+
+#### **Outbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| Todo o tráfego  | Tudo  | 0.0.0.0/0  |
+
+
+Dessa forma, o security group fará as devidas comunicações. Elas se estruturam em:
+EC2 terá o tráfego necessário: Aplicação HTTP onde ouvirá essa porta para o tráfego à aplicação do Wordpress na rede, SSH diretamente do Bastian que irá intercorrer a conexão à rede privada para que seja iniciado o User Data e seja possível conectar à internet (em conjunto com o NAT atrelado à rede privada)e MYSQL/Aurora com a permissão para conexão do banco de dados e todos os registros aplicados, na saída terá o tráfego de dados ao EFS por meio do protocolo utilizado (NFS).
+EFS terá o tráfego necessário: Entrada NFS com o tráfego de dados que chega até o mesmo, permitindo a ligação com as regiões sem correr o risco de perca total dos dados, com saída permitindo o tráfego dos dados.
+RDS terá o tráfego necessário para ouvir apenas os dados do EC2 conforme solicitado no projeto.
+Bastion terá o tráfego necessário para a conexão com a subrede privada a qual terá a aplicação do docker e wordpress via user data sendo possível se conectar pelo ip privado da subrede e o ip público do bastion.
+Em caso de ocorrer algum erro no security group que não seja possível encontrar, é possível permitir todo o tráfego para averiguar o tráfego e as permissões erôneas.
