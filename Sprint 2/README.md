@@ -110,6 +110,16 @@ Sua arquitetura garante alta disponibilidade:
 
 Na aplicação do Wordpress, o EFS foi aplicado nas 4 subredes privadas e alocado apenas no grupo de segurança do EFS-NFS em cada subrede.
 
+Nesta aplicação, o EFS é inserido nas subredes privadas com o Security Group montado para a atuação do EFS, para acompanhar a montagem correta do EFS basta conferir o log do user data pelo comando:
+```
+sudo cat /var/log/startup.log
+```
+E para conferir se o diretório foi criado corretamente basta verificar com o comando abaixo por meio do DNS Name ou ID do EFS em conjunto com o diretório
+```
+df -h
+```
+Em caso de não funcionamento, poderá ser testado o EFS padrão sem personalização.
+
 ### NFS
 O NFS é o protocolo utilizado pelo EFS. Nesse modelo, o NFS define um serviço como servidor, nesse caso, o EFS atua como servidor (fonte central dos arquivos), enquanto as instâncias EC2 funcionam como clientes que acessam esses arquivos. Essa arquitetura permite múltiplos acessos simultâneos ao mesmo arquivo, otimizando o acesso em tempo real inclusive durante atualizações. Quando uma instância EC2 monta o EFS via protocolo NFS, ela envia comandos para acessar os arquivos do servidor EFS, disponibilizando-os localmente no sistema, no diretório /mnt/efs.
 
@@ -164,12 +174,22 @@ O bastion atua como ponto intermediário de segurança para uma aplicação segu
 
 ### Bastian na aplicação do Wordpress (comandos)
 Nesta aplicação, para que o bastian acesse a subrede privada, foi estabelecido o comando até a chave .pem que acessa a subrede privada e foi aplicados os comandos:
-    ```bash
+```
 "eval (ssh-agent -c)"
+```
+    
+```
 ssh-add chave.pem
+```
+    
+```
 ssh -A -i "tuachave.pem" ubuntu@ip_publico_bastion
+```
+    
+```
 ssh ubuntu@ip_privado_subrede_privada
-    ```
+```
+    
 Observação: Há casos em que no user root pode dar falha
 
 ## Security Group
