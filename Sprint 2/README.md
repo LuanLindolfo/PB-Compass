@@ -8,7 +8,7 @@
 - [Acesso à aplicação do WordPress](#acesso-à-aplicação-do-wordpress)
 - [Possíveis Melhorias](#possíveis-melhorias)
 
-## Tecnologias Utilizadas
+## Tecnologias Utilizadas 💻
 ![WordPress](https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![Docker Hub](https://img.shields.io/badge/Docker_Hub-000000?style=for-the-badge&logo=docker&logoColor=white)
@@ -27,10 +27,10 @@
 ![Amazon Auto Scaling](https://img.shields.io/badge/Amazon_Auto_Scaling-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
 
-# Objetivos
+# Objetivos 🔍
 ## O presente projeto trata-se de uma aplicação prática de conhecimentos adquiridos na trilha DevSecOps do programa de bolsas da Compass. Dessa forma, a documentação se faz crucial para a aplicação dos conhecimentos adquiridos e do projeto proposto
 
-# Componentes
+# Componentes 🛠️
 ## VPC
 - 2 Subnets públicas
 - 4 Subnets privadas
@@ -50,7 +50,7 @@
 - Script de bootstrap (user-data)
 - Escalamento baseado em CPU
 
-# Funcionalidade
+# Funcionalidade ⚙️
 ## Funcionalidade VPC
 Cada componente tem uma função específica dentro do contexto geral da aplicação, sendo definidos por sua adequação de desempenho. Eles são implantados na região Norte da Virgínia (Estados Unidos).
 
@@ -195,7 +195,7 @@ ssh ubuntu@ip_privado_subrede_privada
     
 Observação: Há casos em que no user root pode dar falha
 
-## Security Group
+## Security Group 🛡️
 O Security Group é um componente em escala de EC2 que serve como firewall para entrada e saída permitindo tráfego em nível de IP. Dentro do projeto, foi arquitetado para cada componente que faz parte da aplicação do Wordpress.
 
 ### Security Group - EC2
@@ -271,7 +271,7 @@ Bastion: O tráfego necessário será para a conexão com a sub-rede privada, qu
 
 Em caso de algum erro no security group que não seja possível encontrar, é possível permitir todo o tráfego para averiguar as permissões errôneas.
 
-# Acesso à aplicação do Wordpress
+# Acesso à aplicação do Wordpress 💻
 A construção da aplicação é feita para ouvir a porta HTTP (80), desde o Security Group, ao Docker Compose e ao Grupo de Destino do Application Load Balancer, dessa forma, o acesso é feito a partir das análises:
 1. Atualização das informações do EFS no user data
    - Lembrar sempre de atualizar o ID do EFS e o DNS Name do EFS no User Data no Modelo de Execução (atualizanedo o modelo e definindo-o como padrão) e garantindo que o Auto Scaling Group lance a versão atualizada da instância.
@@ -285,7 +285,7 @@ A construção da aplicação é feita para ouvir a porta HTTP (80), desde o Sec
    ```
    - Garanta que a aplicação esteja sendo pesquisada pelo HTTP, em caso contrário, não será possível ser acessada.
 
-# Possíveis Melhorias
+# Possíveis Melhorias ⚙️
 1. A criação da estruturação da aplicação por ser feita por meio do Terraform ou AWS CloudFormation
    - Poder ser feita a codificação a partir da estrutura já criada
 2. Monitoramento com CloudWatch
