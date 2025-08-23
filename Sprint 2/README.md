@@ -5,6 +5,8 @@
 - [Componentes](#componentes)
 - [Funcionalidade](#funcionalidade)
 - [Security Group](#security-group)
+- [Acesso à aplicação do WordPress](#acesso-à-aplicação-do-wordpress)
+- [Possíveis Melhorias](#possíveis-melhorias)
 
 ## Tecnologias Utilizadas
 ![WordPress](https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white)
@@ -110,7 +112,7 @@ Sua arquitetura garante alta disponibilidade:
 
 Na aplicação do Wordpress, o EFS foi aplicado nas 4 subredes privadas e alocado apenas no grupo de segurança do EFS-NFS em cada subrede.
 
-Nesta aplicação, o EFS é inserido nas subredes privadas com o Security Group montado para a atuação do EFS, para acompanhar a montagem correta do EFS basta conferir o log do user data pelo comando:
+Nesta aplicação, o EFS é inserido nas subredes privadas com o Security Group montado para a atuação do EFS, para acompanhar a construção correta do ponto de montagem do EFS (/mnt/efs) basta conferir o log do user data pelo comando:
 ```
 sudo cat /var/log/startup.log
 ```
@@ -169,6 +171,7 @@ Na aplicação, o modelo de execução (configurado para a criação da EC2) é 
 
 A capacidade desejada varia conforme o uso. Neste caso, foi definida como 1, com escalabilidade de capacidade mínima e máxima em 1 e 2, respectivamente (para desativar o auto scaling, defina todas as capacidades como 0). A política de dimensionamento com monitoramento de métricas está ativada para ajuste proporcional da escala e da capacidade desejada.
 
+O tráfego pode ter um aumento simulado para testar a capacidade do ASG
 ## Funcionalidade - Bastion Host
 O bastion atua como ponto intermediário de segurança para uma aplicação segura, neste caso uma rede privada. Todas as conexões remotas devem passar por ele. A aplicação fica visível apenas para o Bastion Host, deixando assim o controle da aplicação menos vulnerável e mais centralizado, facilitando o monitoramento e aumentando a segurança contra ataques. É importante lembrar que o bastion pode ser configurado para uma autenticação de dois fatores.
 
@@ -267,3 +270,22 @@ RDS: O tráfego necessário será para ouvir apenas os dados do EC2, conforme so
 Bastion: O tráfego necessário será para a conexão com a sub-rede privada, que terá a aplicação do Docker e WordPress via User Data, sendo possível se conectar pelo IP privado da sub-rede e pelo IP público do Bastion.
 
 Em caso de algum erro no security group que não seja possível encontrar, é possível permitir todo o tráfego para averiguar as permissões errôneas.
+
+# Acesso à aplicação do Wordpress
+A construção da aplicação é feita para ouvir a porta HTTP (80), desde o Security Group, ao Docker Compose e ao Grupo de Destino do Application Load Balancer, dessa forma, o acesso é feito a partir das análises:
+1. Atualização das informações do EFS no user data
+   - Lembrar sempre de atualizar o ID do EFS e o DNS Name do EFS no User Data no Modelo de Execução (atualizanedo o modelo e definindo-o como padrão) e garantindo que o Auto Scaling Group lance a versão atualizada da instância.
+2. Acompanhamento da Saúde da Aplicação
+   - Verificar se a aplicação que foi introduzida a partir do Auto Scaling Group consta como "Healthy" no Application Load Balancer, em caso de constar como "Unhealthy" há algum problema na aplicação e precisa ser investigado.
+   - Aguardar calguns minutos desde o lançamento da EC2 até a atualização de saúde no Application Load Balancer pois o processo pode demorar um pouco para ser atualizado.
+3. Acesso via HTTP
+   - Quando saudável a aplicação, é possível acessar o Wordpress por meio da pesquisa com o acesso HTTP, sendo:
+   ```
+   http://(DNS name do Application Load Balancer)
+   ```
+   - Garanta que a aplicação esteja sendo pesquisada pelo HTTP, em caso contrário, não será possível ser acessada.
+
+# Possíveis Melhorias
+1. A criação da estruturação da aplicação por ser feita por meio do Terraform ou AWS CloudFormation
+   - Poder ser feita a codificação a partir da estrutura já criada
+2. Monitoramento com CloudWatch
