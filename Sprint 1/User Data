@@ -1,0 +1,86 @@
+#!/bin/bash
+#Atualizando pacotes
+echo "Atualizando pacotes e instalando Nginx e Curl..."
+apt-get update -y
+apt-get install nginx curl -y
+
+echo "Configurando o firewall UFW para Nginx..."
+ufw enable
+ufw allow 'Nginx HTTP'
+ufw allow 'Nginx HTTPS'
+
+#Baixando o index.html desse mesmo repositório
+echo "Baixando o arquivo HTML do repositório GitHub..."
+curl -o /var/www/html/index.html https://raw.githubusercontent.com/LuanLindolfo/PB-Compass/main/Sprint%201/index.html
+
+echo "Reiniciando o Nginx..."
+systemctl restart nginx
+
+#Monitoramento e Webhook
+echo "Criando o diretório de logs de monitoramento..."
+mkdir -p /var/log/monitoramento_web
+
+echo "Criando o script de monitoramento..."
+cat > /usr/local/bin/monitoramentobin.sh << EOF_SCRIPT
+#!/bin/bash
+SITE_URL="http://localhost"
+WEBHOOK_URL="URL do seu WEBHOOK"
+TIMESTAMP=\$(date +"%Y-%m-%d %H:%M:%S")
+
+#Verifica se o Nginx está ativo. O comando retorna 0 se ativo.
+systemctl is-active --quiet nginx
+
+if [ \$? -ne 0 ]; then
+    # Se o Nginx não estiver ativo, ele envia uma notificação de alerta
+    # e tenta reiniciar o serviço.
+    MESSAGE="**⚠️ ALERTA: O Nginx estava OFFLINE!** Tentando reiniciá-lo... 🔄"
+    COLOR=16766720 # Amarelo
+    
+    curl -H "Content-Type: application/json" -X POST -d '{
+        "embeds": [
+        {
+            "title": "Status do Site",
+            "description": "'"\$MESSAGE"'",
+            "color": '"\$COLOR"',
+            "footer": {
+                "text": "Última verificação em '"\$TIMESTAMP"'"
+            }
+        }
+        ]
+    }' \$WEBHOOK_URL
+    
+    systemctl restart nginx
+    sleep 5 # Espera um pouco para o Nginx reiniciar
+    
+fi
+
+#Verifica o status HTTP do site para a notificação final
+STATUS_CODE=\$(curl -o /dev/null -s -w "%{http_code}\n" \$SITE_URL)
+
+if [ "\$STATUS_CODE" -eq 200 ]; then
+    MESSAGE="Site em produção: \$SITE_URL está online! 🎉"
+    COLOR=3066993 # Verde
+else
+    MESSAGE="**⚠️ ALERTA: O site \$SITE_URL está OFFLINE!** 🚨"
+    COLOR=15158332 # Vermelho
+fi
+
+curl -H "Content-Type: application/json" -X POST -d '{
+    "embeds": [
+    {
+        "title": "Status do Site",
+        "description": "'"\$MESSAGE"'",
+        "color": \$COLOR,
+        "footer": {
+            "text": "Última verificação em '"\$TIMESTAMP"'"
+        }
+    }
+    ]
+}' \$WEBHOOK_URL
+EOF_SCRIPT
+
+echo "Tornando o script executável e configurando o crontab..."
+chmod +x /usr/local/bin/monitoramentobin.sh
+(crontab -l 2>/dev/null; echo "* * * * * /usr/local/bin/monitoramentobin.sh >> /var/log/monitoramento_web/cron_output.log 2>&1") | crontab -
+
+echo "Configuração do ambiente concluída com sucesso!"
