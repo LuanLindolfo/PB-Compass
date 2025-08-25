@@ -10,7 +10,7 @@
 - [Conclusão e melhorias futuras aplicáveis](#conclusão-e-melhorias-futuras-aplicáveis)
 
 
-# Objetivos
+# Objetivos 
 
 O presente projeto tem como objetivo a resolução do desafio:
 
@@ -35,13 +35,13 @@ __3 - Script de Monitoramento + Webhook.__\
 
   Disponível em: [Ubuntu 24.04.1 LTS](https://apps.microsoft.com/detail/9NZ3KLHXDJP5?hl=neutral&gl=BR&ocid=pdpshare)
 
-  # Configuração do Ambiente
+  # Configuração do Ambiente 💻
   Utilizando o ambiente da AWS, o ambiente foi preparado para utilizar um ambiente virtualizado em nuvem. Dessa forma, foi utilizada a VPC (Virtual Private Cloud) para que sejam executados os comandos e gerenciada a comunicação do projeto como um todo.
-  ### Configuração da VPC
+  ### Configuração da VPC ⚙️
 Dentre as configurações de estruturação da VPC, a análise ocorre dentro dos aspectos de sub-redes, tabelas de rotas, Gateway da Internet e grupos de segurança no Centro de Dados da Virgínia do Norte. Na estruturação da VPC, foi utilizado o endereçamento IP 10.0.0.0/16 devido à facilidade de leitura e à vasta possibilidade de endereçamento.
 Com dois octetos fixos (10.0, definidos por /16), é possível obter 65.536 endereços. A partir desse entendimento, é possível compreender a dinâmica dos IPs de sub-redes, que se definem por setor a partir do endereço geral da VPC. O endereçamento da VPC é:
 
-  #### Sub-redes, Tabela de Rotas, Gateway da Internet e Grupo de Segurança
+  #### Sub-redes, Tabela de Rotas, Gateway da Internet e Grupo de Segurança 
 As sub-redes (duas públicas e duas privadas) têm como principal objetivo definir as faixas de serviço que vão atuar, organizadas em Zonas de Disponibilidade a partir da Região de atuação. O endereçamento conta com três octetos fixos, definidos por /24, a partir do IP geral da VPC, possibilitando 256 endereços, dos quais geralmente 5 são reservados pela AWS.
 Dessa forma, foram definidas a tabela de rotas principal (local) e a tabela de rotas com Gateway da Internet para que as instâncias determinem rotas de navegação para dentro e fora da VPC, a tabela de rotas das subredes públicas foi alocado com o endereço local da VPC (10.0.0.0/16) em conjunto com o internet gateway que garante o acesso à internet, enquanto a tabela de rotas das subrede privadas possui apenas o endereço local da VPC (10.0.0.0/16). Isso permite que as máquinas se encontrem na rede e mantenham um IP consistente, e que as aplicações internas acessem recursos externos. Dessa forma, a aplicação teve as subredes endereçadas em:
 
@@ -67,13 +67,13 @@ Nessa mesma análise, foram consideradas as configurações de conexão local vi
 | ------------- | ------------- | ------------- |
 | Todo o tráfego  | Tudo  | 0.0.0.0/0  |
 
-  ### Configuração da EC2
+  ### Configuração da EC2 ⚙️
 Com base nas tags de recursos, foi criada uma instância EC2 (Máquina virtualizada) com o sistema operacional Ubuntu (versão 24.04.1 LTS) e tipo de instância t3.micro. Esta escolha deve-se ao fato de a t3.micro oferecer suporte e refletir a evolução mais recente e atualizada da Amazon.
 A instância EC2 foi configurada na VPC criada anteriormente, na sub-rede pública. Seu acesso é feito via SSH por meio de um par de chaves na extensão .pem, utilizando um grupo de segurança já configurado anteriormente na VPC, permitindo que as configurações de conexão local via SSH e as conexões com as sub-redes públicas fossem consideradas.
 
 Após as execuções, é possível conectar-se à instância EC2 utilizando o IP da máquina local através do comando SSH (no subsistema Ubuntu) ou diretamente pela conexão fornecida pela AWS.
 
-# Configuração do Servidor Web
+# Configuração do Servidor Web 💻
 Foi utilizado o servidor web NGINX que tem forte característica estável e com recursos eficiente. 
 
 ## Instalação do serviço
@@ -131,12 +131,12 @@ Para subir o servidor Nginx, foram realizados os seguintes passos com o usuário
 /var/www/html/
       ```
 
-  # Script de Monitoramento e Webhook via Discord
+  # Script de Monitoramento e Webhook via Discord 📳
   ## Webhook no canal de texto do discord
   Para recebimento da notificação de monitoramento do site, foi criado um servidor no discord com um canal de texto para o alerta. Dentro destas configurações, no canal de texto foi criado um webhook em integrações do canal e gerado um link que será utilizado no scirpt.
 
 
-## Script via Bash
+## Script via Bash 💻
 Para que o script seja corretamente implementado, é necessário a criação e implementação de logs (arquivos que armazenam informações de um script como variáveis, comandos e outras informações). Nesse caso, os logs são armazenados no diretório ``` /var/log/ ```, sendo assim, o mesmo local onde será colocado o log do script de monitoramento.
 O arquivo bin também é de extrema importância por ser o local de armazenamento de executáveis, que nesse caso, será o script instalado e não gerenciado pelo sistema.
 * **Navengando até o diretório do ```.log```**
