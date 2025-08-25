@@ -39,14 +39,33 @@ __3 - Script de Monitoramento + Webhook.__\
   Utilizando o ambiente da AWS, o ambiente foi preparado para utilizar um ambiente virtualizado em nuvem. Dessa forma, foi utilizada a VPC (Virtual Private Cloud) para que sejam executados os comandos e gerenciada a comunicação do projeto como um todo.
   ### Configuração da VPC
 Dentre as configurações de estruturação da VPC, a análise ocorre dentro dos aspectos de sub-redes, tabelas de rotas, Gateway da Internet e grupos de segurança no Centro de Dados da Virgínia do Norte. Na estruturação da VPC, foi utilizado o endereçamento IP 10.0.0.0/16 devido à facilidade de leitura e à vasta possibilidade de endereçamento.
-Com dois octetos fixos (10.0, definidos por /16), é possível obter 65.536 endereços. A partir desse entendimento, é possível compreender a dinâmica dos IPs de sub-redes, que se definem por setor a partir do endereço geral da VPC.
+Com dois octetos fixos (10.0, definidos por /16), é possível obter 65.536 endereços. A partir desse entendimento, é possível compreender a dinâmica dos IPs de sub-redes, que se definem por setor a partir do endereço geral da VPC. O endereçamento da VPC é:
 
   #### Sub-redes, Tabela de Rotas, Gateway da Internet e Grupo de Segurança
 As sub-redes (duas públicas e duas privadas) têm como principal objetivo definir as faixas de serviço que vão atuar, organizadas em Zonas de Disponibilidade a partir da Região de atuação. O endereçamento conta com três octetos fixos, definidos por /24, a partir do IP geral da VPC, possibilitando 256 endereços, dos quais geralmente 5 são reservados pela AWS.
-Dessa forma, foram definidas a tabela de rotas principal (local) e a tabela de rotas com Gateway da Internet para que as instâncias determinem rotas de navegação para dentro e fora da VPC. Isso permite que as máquinas se encontrem na rede e mantenham um IP consistente, e que as aplicações internas acessem recursos externos.
+Dessa forma, foram definidas a tabela de rotas principal (local) e a tabela de rotas com Gateway da Internet para que as instâncias determinem rotas de navegação para dentro e fora da VPC, a tabela de rotas das subredes públicas foi alocado com o endereço local da VPC (10.0.0.0/16) em conjunto com o internet gateway que garante o acesso à internet, enquanto a tabela de rotas das subrede privadas possui apenas o endereço local da VPC (10.0.0.0/16). Isso permite que as máquinas se encontrem na rede e mantenham um IP consistente, e que as aplicações internas acessem recursos externos. Dessa forma, a aplicação teve as subredes endereçadas em:
+
+  1. Públicas: 10.0.1.0/24, 10.0.2.0/24
+  2. Privadas: 10.0.3.0/24, 10.0.4.0/24
 
 Posteriormente, o grupo de segurança foi definido com regras de entrada e saída para cada tipo de sub-rede (pública e privada), dadas as características de atuação de cada uma. Para as sub-redes públicas, os acessos de rede foram configurados, incluindo a configuração direta de SSH utilizando o IP da máquina local para acesso à máquina virtual na AWS.
 Nessa mesma análise, foram consideradas as configurações de conexão local via SSH e as conexões com as sub-redes públicas.
+
+  O Security Group da EC2 é estruturado da seguinte forma:
+    #### **Inbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| HTTPS  | 443  | 0.0.0.0/0  |
+| HTTP  | 80  | 0.0.0.0/0  |
+| SSH  | 22  | IP da máquina  |
+
+   Para fins de teste e averiguação se há algum problema no security group, o SSH pode ser permitido com origem 0.0.0.0/0. Não é recomendado pois a aplicação fica vulnerável.
+
+
+#### **Outbound**
+| Tipo  | Intervalo de Portas | Origem |
+| ------------- | ------------- | ------------- |
+| Todo o tráfego  | Tudo  | 0.0.0.0/0  |
 
   ### Configuração da EC2
 Com base nas tags de recursos, foi criada uma instância EC2 (Máquina virtualizada) com o sistema operacional Ubuntu (versão 24.04.1 LTS) e tipo de instância t3.micro. Esta escolha deve-se ao fato de a t3.micro oferecer suporte e refletir a evolução mais recente e atualizada da Amazon.
@@ -170,6 +189,31 @@ Para testagem do funcionamento do serviço, basta parar o nginx por meio do coma
    ```bash
   systemctl start nginx
   ```
+# Atualização (08/25) - Implementação de User Data e criação de Modelo De Execução 🤖
+A arquitetura construída teve um upgrade automatizado, sendo eles:
+  1. Automação Completa via User Data: Todo o processo de deploy e monitoramento do Nginx agora é 100% automatizado diretamente no User Data da EC2.
+
+   - Essa é a grande novidade do projeto. A arquitetura agora é totalmente automatizada usando o User Data da AWS EC2. Isso significa que, a partir de agora, toda a configuração da instância é   feita de forma automática. O script no User Data é responsável por instalar o Nginx, baixar o código-fonte da aplicação HTML diretamente do repositório, e configurar o ambiente para estar no ar em poucos minutos.
+    - Para averiguação do processo, basta consultar os logs:
+      ```bash
+      sudo cat /var/log/startup.log
+      ```
+      e a criação do diretório por meio dos comandos:
+      ```bash
+      df -h
+      ```
+
+  2.Implantação e Segurança Aprimoradas: O User Data agora cuida da instalação e configuração do Nginx, baixa o código-fonte HTML, e configura o UFW para garantir o acesso seguro por SSH.
+  
+  - A implantação do servidor Nginx foi aprimorada e também automatiza a segurança. O User Data não só instala o Nginx e as dependências necessárias, mas também configura o Firewall. Essa etapa crucial garante que apenas o tráfego necessário, como o acesso via SSH e as portas da aplicação, seja permitido, protegendo o servidor contra acessos indesejados, fator já aplicado manualmente anteriormente, mas agora de forma ágil e automatizada.
+    
+  3. Monitoramento e Resiliência Automáticos: Um script verifica o status do serviço Nginx a cada minuto. Em caso de falha, ele é reiniciado e uma notificação é enviada automaticamente para o Discord       via Webhook, garantindo a resiliência do projeto.
+
+   - Um script de monitoramento foi implementado para verificar o status do serviço Nginx a cada minuto. Caso o serviço falhe, o script o reinicia automaticamente ter uma disponibilidade mais funcional. Além disso, para informação, uma notificação é enviada imediatamente para um canal do Discord por meio de um Webhook, averiguando o estado do site desde a disponibilidade, à indisponibilidade e ao reinício do serviço, tornando o monitoramento proativo sem a necessidade de intervenção manual.
+  
+  4. Criação de um Modelo de Execução construído com as Tags e a aplicação do User Data.
+   - Para tornar o processo mais eficiente, foi criado um Modelo de Execução na AWS. Esse modelo já vem configurado com as tags necessárias e o script do User Data, simplificando a criação de novas instâncias. Dessa forma, o deploy e a aplicação são ágeis.
+
 # **Conclusão e melhorias futuras aplicáveis**
-Com base em todo o documento explicativo, é evidente a possibilidade de utilização de serviço webhook integrado ao linux agindo como ferramenta essencial de monitoramento de site, podendo ser integrado também ao Telegram. Em uma análise profunda, é possível mirar em melhorias em base de processamento onde pode ser aplicado um user data que "transcreva" o HTML e o Script em conjunto com os comandos introduzidos no usar data para que seja injetado na máquina, ou que obtenha em seu escopo o HTML e o Script em caso de máquina nova, ao ser inicializado e, assim, podendo construir uma estrutura completa utilizando o Terraform, transformando-se um trabalho com maior alcance em automatização.
+Com base em todo o documento explicativo, é evidente a possibilidade de utilização de serviço webhook integrado ao linux agindo como ferramenta essencial de monitoramento de site, podendo ser integrado também ao Telegram. Em uma análise profunda, é possível mirar em melhorias em base de processamento ao ser inicializado e tendo a arquitetura construída utilizando o CloudFormation ou o Terraform, transformando-se um trabalho com maior alcance em automatização.
 
