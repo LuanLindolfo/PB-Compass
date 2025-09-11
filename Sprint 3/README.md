@@ -20,4 +20,8 @@ Para o acesso aos microserviços da aplicação, foi realizado um fork (bifurca�
 O fork tem o objetivo de propor mudanças em um código de outra pessoa, a partir da bifurcação, a adaptações podem ser realizadas. Neste caso, foi utilizad o git para fazer o fork localmente.
 
 ## Instação do git e realização do fork
-A instalação do git foi realizada a partir da documentação do GitDocs para [Configuração do git](https://docs.github.com/pt/get-started/git-basics/set-up-git)
+A instalação do git foi realizada a partir da documentação do GitDocs para [Configuração do git](https://docs.github.com/pt/get-started/git-basics/set-up-git) que está disponível para Windows, Mac e Linux/Unix, no caso desta aplicação, foi utilizado o git para o sistema operacional Windows.
+
+Após a instalação disponível na [Configuração do git](https://docs.github.com/pt/get-started/git-basics/set-up-git), foi escolhido o nome de usuário e a senha bem como foi feito o link como github para o pull e o push do fork.
+
+Os comandos utilizados inicialmente também foram advindos do GitDocs, na seção de [Criação de fork de um repositório](https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
