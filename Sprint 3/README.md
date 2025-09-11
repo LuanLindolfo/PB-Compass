@@ -1,12 +1,6 @@
 # Gitops
 ## Sumário
 - [User Data](/Sprint%202/user%20data)
-- [Objetivos](#objetivos)
-- [Componentes](#componentes)
-- [Funcionalidade](#funcionalidade)
-- [Security Group](#security-group)
-- [Acesso à aplicação do WordPress](#acesso-à-aplicação-do-wordpress)
-- [Possíveis Melhorias](#possíveis-melhorias)
 
 ## Tecnologias Utilizadas 💻
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
