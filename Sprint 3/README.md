@@ -168,13 +168,15 @@ kube-system   storage-provisioner                1/1     Running   1 (10s ago)  
 ### Acesso à aplicação 
 Na aplicação, será necessário configurar o ArgoCD para uso de monitoramento do repositório do GitHub. Em **New App** basta preencher os campos com as seguintes informações:
   - Applicationa Name: O nome dado pra aplicação atual é **online-boutique**
+    
   - Project: Default
-  - Source
+    
+  - Source:
     - Repository URL: Cole o link do repositório no GitHub
     - Revision: HEAD como padrão
     - Path: Caminho para o arquivo YAML, nesse caso, gitops-microservices/k8s
 
-  - Destination
+  - Destination:
     - Cluster URL: Cluster local
     - Namespace: Definido como default
    
