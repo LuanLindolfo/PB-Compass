@@ -24,4 +24,7 @@ A instalação do git foi realizada a partir da documentação do GitDocs para [
 
 Após a instalação disponível na [Configuração do git](https://docs.github.com/pt/get-started/git-basics/set-up-git), foi escolhido o nome de usuário e a senha bem como foi feito o link como github para o pull e o push do fork.
 
-Os comandos utilizados inicialmente também foram advindos do GitDocs, na seção de [Criação de fork de um repositório](https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
+Os comandos utilizados inicialmente também foram advindos do GitDocs, na seção de [Criação de fork de um repositório](https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) onde:
+  - Houve navegação até o diretório [microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo/)
+  - Foi selecionada a opção de fork (no canto direito superior)
+  - 
