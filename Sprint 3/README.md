@@ -120,5 +120,48 @@ kube-system   kube-scheduler-minikube            1/1     Running   0            
 kube-system   storage-provisioner                1/1     Running   1 (10s ago)   48s
   ```
 ### Acessando o ArgoCD localmente
- Após a aplicação dos pods e dos namespaces em conjunto da construção do cluster, será realizada a aplicação do ArgoCD. A ferramenta tem como objetivo utilizar o modelo GitOps como modelo de aplicação, verificando, sincronizando e atualizando as alterações do repositório (única fonte).
- 
+ Após a aplicação dos pods e dos namespaces em conjunto da construção do cluster, será realizada a aplicação do ArgoCD. A ferramenta tem como objetivo utilizar o modelo GitOps como modelo de aplicação, verificando, sincronizando e atualizando as alterações do repositório (única fonte). Os passos foram os seguinte:
+ 1. Criando o nomespace argocd
+     ```bash
+    kubectl create namespace argocd
+    ```
+ 2. Baixando o arquivo de instalação doArgoCD diretamente do repositório oficial do GitHub
+     ```bash
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    ```
+     - ``` kubectl apply ```: Atualiza os recursos a partir da leitura de um arquivo ou URL
+     - ``` -n argocd ```: Informando o namespace (em caso de não existir, o arquivo d einstalação instalará)
+     - ``` -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml ```: Apontando o caminho do arquivo **install.yaml** YAML com os devidos recursos
+ 3. Verificação do processo
+     ```bash
+    kubectl get pods -n argocd
+    ```
+ 4. Padrão de instalação correta
+     ```bash
+       NAME                                               READY   STATUS              RESTARTS   AGE 
+     argocd-application-controller-0                    1/1     Running               0          17s 
+     argocd-applicationset-controller-cb7958dd7-tlcv5   1/1     Running               0          17s 
+     argocd-dex-server-6b45dfcbb8-456b5                 1/1     Running               0          17s 
+     argocd-notifications-controller-85d8b54b6f-fc2rn   1/1     Running               0          17s 
+     argocd-redis-6596588c7c-wnxn9                      1/1     Running               0          17s 
+     argocd-repo-server-69777f45db-6f78r                1/1     Running               0          17s 
+     argocd-server-577c86bbd8-nrm7z                     1/1     Running               0          17s
+    ```
+5. Acessando o ArgoCD com o comando que direciona o tráfego do serviço argocd-server para a porta 8080 para a máquina na porta 443
+   ```bash
+   kubectl port-forward svc/argocd-server -n argocd 8080:443
+    ```
+7. Acessando pelo localhost
+   ```bash
+   https://localhost:8080
+    ```
+  - Para acessar a aplicação basta utilizar o comando para obter a senha:
+     ```bash
+     kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+      ```
+     - ``` kubectl -n argocd get secret argocd-initial-admin-secret ```: Busca no namespace o recurso Secret ```argocd-initial-admin-secret```
+     - ``` -o jsonpath="{.data.password} ```: Consultando e extraindo a saída filtrada apenas com o valor da chave
+     - ``` | base64 -d ```: Usa a saída do comando anterior e encaminha para o próximo
+  
+  Por padrão, o usuário é    ```admin```
+  
