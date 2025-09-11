@@ -14,6 +14,9 @@
 ## Objetivo 🎯
 Executar um conjunto de microserviços (Online Boutique) em Kubernetes local usando Rancher Desktop, controlado por GitOps com ArgoCD, a partir de um repositório público no GitHub. 
 
+### O que é GitOps?
+GitOps utiliza a base DevOps (containerização, gerenciamento e ambientação em nuvem) utilizando o Git como única fonte para estruturação e aplicação. A prática desse conceito será reconhecida no atual projeto.
+
 # Fork e repositório GitHub
 
 Para o acesso aos microserviços da aplicação, foi realizado um fork (bifurcação) a partir do resporitório público [microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo/). O foco é no arquivo YAML com o seguinte caminho: *release/kubernetes-manifests.yaml*
@@ -116,3 +119,6 @@ kube-system   kube-proxy-z62wd                   1/1     Running   0            
 kube-system   kube-scheduler-minikube            1/1     Running   0             50s
 kube-system   storage-provisioner                1/1     Running   1 (10s ago)   48s
   ```
+### Acessando o ArgoCD localmente
+ Após a aplicação dos pods e dos namespaces em conjunto da construção do cluster, será realizada a aplicação do ArgoCD. A ferramenta tem como objetivo utilizar o modelo GitOps como modelo de aplicação, verificando, sincronizando e atualizando as alterações do repositório (única fonte).
+ 
