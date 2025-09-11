@@ -13,3 +13,4 @@
 - [User Data](/Sprint%202/user%20data)
 
 ### [GitOps na prática](/Sprint%203) ⚙️
+- [GitOps](/Sprint%203/README.md)
