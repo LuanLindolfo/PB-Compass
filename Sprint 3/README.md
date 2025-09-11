@@ -31,6 +31,10 @@ Os comandos utilizados inicialmente também foram advindos do GitDocs, na seçã
   - Em seguida, basta editar o nome do repositório onde por padrão são nomeados da mesma forma que o repositório de origem do fork.
   - É importante copiar apenas o branch main para obter apenas o ramo principal do código.
 
-Ao ser criada a bifurcação, tem que ser clonado o repositório de origem pois mesmo que tenha sido bifurcado, é importante ter os arquivos localmente, dessa forma foi utilizado o seguinte esquema com o Github e o Git:
+Ao ser criada a bifurcação, tem que ser clonado o repositório de origem pois mesmo que tenha sido bifurcado, é importante ter os arquivos localmente (para fins de edição e outras ações a serem tomadas a partir do repositório), dessa forma foi utilizado o seguinte esquema com o Github e o Git:
   - Na seleção "Code" do projeto, copie o HTTPS do projeto
-  - No gitbash insira o comando
+  - No gitbash insira o comando, no local onde os arquivos deverão ser clonados, ``` git clone ``` com as informações copiadas:
+    ```
+    git clone https://github.com/username/repositório
+    ```
+  - Com o mesmo HTTPS copiado, após o primeiro comando no gitbash, sincronize o 
