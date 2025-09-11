@@ -11,3 +11,5 @@
      
 ### [Wordpress em Alta-Disponibilidade + User Data](/Sprint%202) 🔁🤖
 - [User Data](/Sprint%202/user%20data)
+
+### [GitOps na prática](/Sprint%203) ⚙️
