@@ -80,9 +80,14 @@ Para a estruturação de kubernetes na aplicação, foram utilizadas as seguinte
 4. [Minikube (Ferramenta de execução de cluster local)](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)
 5. [ArgoCD (Ferramenta de entrega contínua para Kubernetes)](https://argo--cd-readthedocs-io.translate.goog/en/stable/getting_started/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc)
 
+Lembrando que é importante ter acesso à internet para o download das pendências necessárias para a aplicação (como imagens e as devidas ferramentas), o teste de conectividade pode ser feito por meio do ping com o servidor do google, que retornará o envio e a verificação de pacotes de dados, com o comando:
+```bash
+  ping google.com
+```
+
   A instalação de cada ferramenta encontra-se linkada com as documentações e store disponível de download. É importante que a sequência de instalação seja realizada na ordem estabelecida para o funcionamento correto da aplicação GitOps.
 
-  Enfatizando a aplicação do minikube e do ArgoCD temos a personalização de aplicação para consumo de cada CPU disponibilizada para o cluster, neste caso, para o bom funcionamento do cluster foi utilizado o seguinte comando para start do minikube:
+  Enfatizando a aplicação do minikube e do ArgoCD,temos a personalização de aplicação para consumo de cada CPU disponibilizada para o cluster, neste caso, para o bom funcionamento do cluster foi utilizado o seguinte comando para start do minikube:
   ```bash
   minikube start --driver=docker --cpus=2 --memory=2048mb
   ```
@@ -90,3 +95,24 @@ Para a estruturação de kubernetes na aplicação, foram utilizadas as seguinte
   - ``` --driver=docker ```: Especifica que o cluster irá ser executado em um container, no caso, estabelece o driver que o minikube usa para o ambiente (docker).
   - ``` --cpus=2 ```: Define a quantidade de CPU virtual para o o cluster, em caso de ocorrer problema em uma, haverá disponibilidade de outra CPU virtual.
   - ``` --memory=2048mb ```: Especifica a quantidade de memória alocada para o cluster, neste caso, 2GB.
+
+Em seguida, haverá a construção da estrutura para a aplicação do cluster que deve levar um curto período de tempo a depender de cada máquina e da personalização do start, sendo possível verificar os pods e os namespaces por meio do comando:
+  ```bash
+  minikube kubectl -- get pods -A
+  ```
+  - ``` minikube kubectl ```: Comando que inicia o kubectl por meio do minikube comunicando-se com o cluster localmente.
+  - ``` -- get pods ```: Comando que lista pods.
+  - ``` -A ```: Abreviação do comando ``` --all-namespaces ``` busca todos os pods em todos os namespaces.
+
+O resultado da aplicação está bem sucedida quando estiver no padrão:
+  ```bash
+NAMESPACE     NAME                               READY   STATUS    RESTARTS      AGE
+kube-system   coredns-66bc5c9577-gbf6h           1/1     Running   0             43s
+kube-system   coredns-66bc5c9577-z527g           1/1     Running   0             43s
+kube-system   etcd-minikube                      1/1     Running   0             50s
+kube-system   kube-apiserver-minikube            1/1     Running   0             50s
+kube-system   kube-controller-manager-minikube   1/1     Running   0             49s
+kube-system   kube-proxy-z62wd                   1/1     Running   0             44s
+kube-system   kube-scheduler-minikube            1/1     Running   0             50s
+kube-system   storage-provisioner                1/1     Running   1 (10s ago)   48s
+  ```
