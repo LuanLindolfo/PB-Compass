@@ -147,7 +147,7 @@ kube-system   storage-provisioner                1/1     Running   1 (10s ago)  
      argocd-repo-server-69777f45db-6f78r                1/1     Running               0          17s 
      argocd-server-577c86bbd8-nrm7z                     1/1     Running               0          17s
     ```
-5. Acessando o ArgoCD com o comando que direciona o tráfego do serviço argocd-server para a porta 8080 para a máquina na porta 443
+5. Acessando o ArgoCD com o comando que direciona o tráfego do serviço argocd-server para a porta 8080 para a máquina na porta 443. Não necessiariamente precisa ser a porta 8080, pode ser uma das portas alcançadas pelo port-forward (1 - 65535)
    ```bash
    kubectl port-forward svc/argocd-server -n argocd 8080:443
     ```
@@ -167,5 +167,17 @@ kube-system   storage-provisioner                1/1     Running   1 (10s ago)  
   
 ### Acesso à aplicação 
 Na aplicação, será necessário configurar o ArgoCD para uso de monitoramento do repositório do GitHub. Em **New App** basta preencher os campos com as seguintes informações:
-  - Applicationa Name: O nome dado pra aplicação atual é **online-boutique**
-  - Project: Default
+  - Source
+    - Applicationa Name: O nome dado pra aplicação atual é **online-boutique**
+    - Project: Default
+    - Revision: HEAD como padrão
+    - Path: Caminho para o arquivo YAML, nesse caso, gitops-microservices/k8s
+
+  - Destination
+    - Cluster URL: Cluster local
+    - Namespace: Definido como default
+   
+Em seguida, basta criar na opção **Create** e na opção **Sync** para a aplicação dos manifestos no cluster. Em seguida, basta aguardar o status **Healthy** e a aplicação estará sincronizada.
+
+O acesso à aplicação pode ser feito por meio da porta estabelecida, nesse caso: ```https://localhost:8080```
+
