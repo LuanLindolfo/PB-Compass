@@ -70,11 +70,23 @@ Ao ser criada a bifurcação, tem que ser clonado o repositório de origem pois 
 
     Dessa forma, a bifurcação será mantida sincronizada com o repositório upstream (de origem).
 ## Kubernetes, cluster e pods
-Para a estruturação de kubernetes na aplicação, foram utilizadas as seguintes ferramentas:
-- [Ubuntu 24.04.1 LTS (WSL)](https://apps.microsoft.com/detail/9NZ3KLHXDJP5?hl=neutral&gl=BR&ocid=pdpshare)
-- [Kubectl (Gerenciador de cluster Kubernetes)](https://kubernetes-io.translate.goog/docs/tasks/tools/install-kubectl-linux/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc#download-binary-linux-0)
-- [Minikube (Ferramenta de execução de cluster local)](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)
-- [Rancher Desktop (Para executar e gerir cluster localmente)](https://docs-rancherdesktop-io.translate.goog/getting-started/installation/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc)
-- [ArgoCD (Ferramenta de entrega contínua para Kubernetes)](https://argo--cd-readthedocs-io.translate.goog/en/stable/getting_started/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc)
 
-  A instalação de cada ferramenta encontra-se linkada com as documentações e store disponível de download
+É essencial saber que, por se tratar de um subsistema, é importante estar no diretório correto para a instalação das dependências de Kubectl, Minikube e ArgoCD, nese caso, foi utilizado o caminho ``` cd /mnt/c/Users/SeuUsuario/Restante_do_caminho_da_aplicação ```.
+
+Para a estruturação de kubernetes na aplicação, foram utilizadas as seguintes ferramentas:
+1. [Ubuntu 24.04.1 LTS (WSL)](https://apps.microsoft.com/detail/9NZ3KLHXDJP5?hl=neutral&gl=BR&ocid=pdpshare)
+2. [Rancher Desktop (Para executar e gerir cluster localmente)](https://docs-rancherdesktop-io.translate.goog/getting-started/installation/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc)
+3. [Kubectl (Gerenciador de cluster Kubernetes)](https://kubernetes-io.translate.goog/docs/tasks/tools/install-kubectl-linux/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc#download-binary-linux-0)
+4. [Minikube (Ferramenta de execução de cluster local)](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)
+5. [ArgoCD (Ferramenta de entrega contínua para Kubernetes)](https://argo--cd-readthedocs-io.translate.goog/en/stable/getting_started/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc)
+
+  A instalação de cada ferramenta encontra-se linkada com as documentações e store disponível de download. É importante que a sequência de instalação seja realizada na ordem estabelecida para o funcionamento correto da aplicação GitOps.
+
+  Enfatizando a aplicação do minikube e do ArgoCD temos a personalização de aplicação para consumo de cada CPU disponibilizada para o cluster, neste caso, para o bom funcionamento do cluster foi utilizado o seguinte comando para start do minikube:
+  ```bash
+  minikube start --driver=docker --cpus=2 --memory=2048mb
+  ```
+  - ``` minikube start ```: Comando que inicia o minikube criando um cluster localmente.
+  - ``` --driver=docker ```: Especifica que o cluster irá ser executado em um container, no caso, estabelece o driver que o minikube usa para o ambiente (docker).
+  - ``` --cpus=2 ```: Define a quantidade de CPU virtual para o o cluster, em caso de ocorrer problema em uma, haverá disponibilidade de outra CPU virtual.
+  - ``` --memory=2048mb ```: Especifica a quantidade de memória alocada para o cluster, neste caso, 2GB.
