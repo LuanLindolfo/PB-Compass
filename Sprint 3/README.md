@@ -27,4 +27,10 @@ Após a instalação disponível na [Configuração do git](https://docs.github.
 Os comandos utilizados inicialmente também foram advindos do GitDocs, na seção de [Criação de fork de um repositório](https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) onde:
   - Houve navegação até o diretório [microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo/)
   - Foi selecionada a opção de fork (no canto direito superior)
-  - 
+   <img width="482" height="45" alt="Image" src="https://github.com/user-attachments/assets/39a2b691-6663-443d-94b1-9fc9b54c727e" />
+  - Em seguida, basta editar o nome do repositório onde por padrão são nomeados da mesma forma que o repositório de origem do fork.
+  - É importante copiar apenas o branch main para obter apenas o ramo principal do código.
+
+Ao ser criada a bifurcação, tem que ser clonado o repositório de origem pois mesmo que tenha sido bifurcado, é importante ter os arquivos localmente, dessa forma foi utilizado o seguinte esquema com o Github e o Git:
+  - Na seleção "Code" do projeto, copie o HTTPS do projeto
+  - No gitbash insira o comando
