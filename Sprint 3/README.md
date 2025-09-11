@@ -165,3 +165,7 @@ kube-system   storage-provisioner                1/1     Running   1 (10s ago)  
   
   Por padrão, o usuário é    ```admin```
   
+### Acesso à aplicação 
+Na aplicação, será necessário configurar o ArgoCD para uso de monitoramento do repositório do GitHub. Em **New App** basta preencher os campos com as seguintes informações:
+  - Applicationa Name: O nome dado pra aplicação atual é **online-boutique**
+  - Project: Default
