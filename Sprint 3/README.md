@@ -69,3 +69,12 @@ Ao ser criada a bifurcação, tem que ser clonado o repositório de origem pois 
     ```
 
     Dessa forma, a bifurcação será mantida sincronizada com o repositório upstream (de origem).
+## Kubernetes, cluster e pods
+Para a estruturação de kubernetes na aplicação, foram utilizadas as seguintes ferramentas:
+- [Ubuntu 24.04.1 LTS (WSL)](https://apps.microsoft.com/detail/9NZ3KLHXDJP5?hl=neutral&gl=BR&ocid=pdpshare)
+- [Kubectl (Gerenciador de cluster Kubernetes)](https://kubernetes-io.translate.goog/docs/tasks/tools/install-kubectl-linux/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc#download-binary-linux-0)
+- Minikube (Ferramenta de execução de cluster local)
+- Rancher Desktop (Para executar e gerir cluster localmente)
+- ArgoCD (Ferramenta de entrega contínua para Kubernetes)
+
+  
