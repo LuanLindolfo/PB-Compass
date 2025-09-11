@@ -37,4 +37,21 @@ Ao ser criada a bifurcação, tem que ser clonado o repositório de origem pois 
     ```
     git clone https://github.com/username/repositório
     ```
-  - Com o mesmo HTTPS copiado, após o primeiro comando no gitbash, sincronize o 
+    Será mostrada uma resposta semelhante ou igual:
+    ```
+    $ git clone https://github.com/username/repositório
+    > Cloning into `(repositório)`...
+    > remote: Counting objects: 10, done.
+    > remote: Compressing objects: 100% (8/8), done.
+    > remote: Total 10 (delta 1), reused 10 (delta 1)
+    > Unpacking objects: 100% (10/10), done.
+    ```
+  - Com o mesmo HTTPS copiado, após o primeiro comando no gitbash e no diretório em que o fork está, sincronize o for com o repositório upstream (origem), utilize o comando:
+    ```
+    git remote -v
+    ```
+    Dessa forma, irá aparecer uma resposta como:
+    ```
+    origin  https://github.com/username/seu-fork.git (fetch)
+    origin  https://github.com/username/seu-fork.git (push)
+    ```
