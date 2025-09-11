@@ -37,7 +37,7 @@ Ao ser criada a bifurcação, tem que ser clonado o repositório de origem pois 
     ```
     git clone https://github.com/username/repositório
     ```
-    Será mostrada uma resposta semelhante ou igual:
+    Será mostrada uma resposta nessa estrutura:
     ```
     $ git clone https://github.com/username/repositório
     > Cloning into `(repositório)`...
@@ -55,3 +55,17 @@ Ao ser criada a bifurcação, tem que ser clonado o repositório de origem pois 
     origin  https://github.com/username/seu-fork.git (fetch)
     origin  https://github.com/username/seu-fork.git (push)
     ```
+  - Adicione a conexão remota com o upstream para a bifurcação:
+    ```
+    git remote add upstream https://github.com/proprietário-original/repositório-original.git
+    ```
+    Ao inserir o comando novamente, será possível ver o repositório. A resposta ao comando será nessa estrutura:
+    ```
+    $ git remote -v
+    > origin    https://github.com/username/seu-fork.git (fetch)
+    > origin    https://github.com/username/seu-fork.git (push)
+    > upstream  https://github.com/proprietário-original/repositório-original.git (fetch)
+    > upstream  https://github.com/proprietário-original/repositório-original.git (push)
+    ```
+
+    Dessa forma, a bifurcação será mantida sincronizada com o repositório upstream (de origem).
