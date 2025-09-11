@@ -77,4 +77,4 @@ Para a estruturação de kubernetes na aplicação, foram utilizadas as seguinte
 - [Rancher Desktop (Para executar e gerir cluster localmente)](https://docs-rancherdesktop-io.translate.goog/getting-started/installation/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc)
 - [ArgoCD (Ferramenta de entrega contínua para Kubernetes)](https://argo--cd-readthedocs-io.translate.goog/en/stable/getting_started/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc)
 
-  
+  A instalação de cada ferramenta encontra-se linkada com as documentações e store disponível de download
