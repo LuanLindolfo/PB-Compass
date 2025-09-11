@@ -15,4 +15,4 @@
 Executar um conjunto de microserviços (Online Boutique) em Kubernetes local usando Rancher Desktop, controlado por GitOps com ArgoCD, a partir de um repositório público no GitHub. 
 
 # Fork e repositório GitHub
-Para o acesso aos microserviços da aplicação, foi utilizado
+Para o acesso aos microserviços da aplicação, foi realizado um fork (bifurcação) a partir do resporitório
