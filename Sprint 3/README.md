@@ -17,7 +17,7 @@ Executar um conjunto de microserviços (Online Boutique) em Kubernetes local usa
 # Fork e repositório GitHub
 
 Para o acesso aos microserviços da aplicação, foi realizado um fork (bifurcação) a partir do resporitório público [microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo/). O foco é no arquivo YAML com o seguinte caminho: *release/kubernetes-manifests.yaml*
-O fork tem o objetivo de propor mudanças em um código de outra pessoa, a partir da bifurcação, a adaptações podem ser realizadas. Neste caso, foi utilizad o git para fazer o fork localmente.
+O fork tem o objetivo de propor mudanças em um código de outra pessoa, a partir da bifurcação, a adaptações podem ser realizadas. Neste caso, foi utilizad o git para fazer o fork localmente. o fork realizado a partir do repositório público se encontra no caminho [microservices-demo-fork](https://github.com/LuanLindolfo/microservices-demo)
 
 ## Instação do git e realização do fork
 A instalação do git foi realizada a partir da documentação do GitDocs para [Configuração do git](https://docs.github.com/pt/get-started/git-basics/set-up-git) que está disponível para Windows, Mac e Linux/Unix, no caso desta aplicação, foi utilizado o git para o sistema operacional Windows.
