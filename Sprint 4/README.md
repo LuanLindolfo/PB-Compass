@@ -2,13 +2,13 @@
 ## Sumário
 - [Objetivo](/Objetivo)
 - [Repositórios](Repositórios)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Ferramentas e Configurações Essenciais](#ferramentas-e-informações-essenciais)
-- [Arquitetura e Fluxo de CI/CD](#arquitetura-do-projeto)
-- [Repositório hello-app e Variáveis de Segredo](#repositório-hello-app)
-- [Arquivos dos Repositórios](#arquivos-dos-repositórios)
-- [Conceitos e Uso do ArgoCD](#o-que-é-argocd)
-- [Acesso e Visualização da Aplicação](#aplicação-argocd)
+- [Tecnologias Utilizadas](tecnologias-utilizadas)
+- [Ferramentas e Configurações Essenciais](ferramentas-e-informações-essenciais)
+- [Arquitetura e Fluxo de CI/CD](arquitetura-do-projeto)
+- [Repositório hello-app e Variáveis de Segredo](repositório-hello-app)
+- [Arquivos dos Repositórios](arquivos-dos-repositórios)
+- [Conceitos e Uso do ArgoCD](o-que-é-argocd)
+- [Acesso e Visualização da Aplicação](aplicação-argocd)
 
 
 ## Tecnologias Utilizadas 💻
