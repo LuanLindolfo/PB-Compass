@@ -104,6 +104,30 @@ Dentro do repositório foi criado o [Workspace](/.github/workflows) para compila
 
   - *service.yaml*: Este manifesto define como expor a sua aplicação. Ele cria um serviço que roteia o tráfego externo para os pods da sua aplicação, tornando-a acessível.
 
+## O que é GitOps?
+GitOps utiliza a base DevOps (containerização, gerenciamento e ambientação em nuvem) utilizando o Git como única fonte para estruturação e aplicação.
+
+## O que é ArgoCD?
+O ArgoCD é uma ferramenta declarativa e open-source para Entrega Contínua (CD) no Kubernetes. Ela faz parte das ferramentas GitOps.
+
+O principal objetivo do ArgoCD é garantir que o estado do seu cluster Kubernetes esteja sempre sincronizado com os arquivos de configuração que estão no repositório Git.
+
+**Seus propósitos principais são:**
+
+- Sincronização Automática: Detecta mudanças nos manifestos do Git e as aplica no cluster.
+
+- Gerenciamento de Ambientes: Ajuda a gerenciar múltiplos ambientes (como produção e desenvolvimento) de forma consistente.
+
+- Visibilidade e Monitoramento: Oferece uma interface web para visualizar o estado das aplicações e identificar problemas rapidamente.
+
+**Benefícios**
+- Aumenta a visibilidade do que está rodando no cluster.
+
+- Reduz o downtime (tempo de inatividade) com implantações mais rápidas e automáticas.
+
+- Melhora a segurança ao eliminar a necessidade de acesso SSH direto ao cluster.
+
+- Facilita a colaboração em equipes de DevOps.
 
 ## Namespace do ArgoCD
 Para a ambientalização da aplicação, foi criado um namespace para o ArgoCD com o comando
