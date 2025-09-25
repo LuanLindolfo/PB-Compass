@@ -1,7 +1,7 @@
 # CI/CD com o Github Actions
 ## Sumário
-- [Objetivo](/Objetivo)
-- [Repositórios](Repositórios)
+- [Objetivo](objetivo)
+- [Repositórios](repositórios)
 - [Tecnologias Utilizadas](tecnologias-utilizadas)
 - [Ferramentas e Configurações Essenciais](ferramentas-e-informações-essenciais)
 - [Arquitetura e Fluxo de CI/CD](arquitetura-do-projeto)
