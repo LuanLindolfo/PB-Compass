@@ -13,6 +13,15 @@
 ## Objetivo 🎯
 Automatizar o ciclo completo de desenvolvimento, build, deploy e execução de uma aplicação FastAPI simples, usando GitHub Actions para CI/CD, Docker Hub como registry, e ArgoCD para entrega contínua em Kubernetes local com Rancher Desktop
 
+## Ferramentas e informações essenciais
+Nesse projeto, foi realizado em um ambiente [WSL Ubuntu](https://apps.microsoft.com/detail/9NZ3KLHXDJP5?hl=neutral&gl=BR&ocid=pdpshare) com instalação do [Kubectl](https://kubernetes-io.translate.goog/docs/reference/kubectl/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc) com [instalação no Ubuntu](https://kubernetes.io/pt-br/docs/tasks/tools/install-kubectl-linux), posteriormente foi criado o cluster que está sendo monitorado e gerenciado pelo [Rancher Desktop](https://rancherdesktop.io) que além do monitoramento do cluester e dos nós, também roda e inicia o [Docker Engine no Ubuntu](https://docs.docker.com/engine/install/ubuntu). outro fator crucial é a instalação do [Python 3](https://python.org.br/instalacao-windows) que foi instalado no sistema operacional nativo da máquina (Windows) e gerenciado via [Visual Studio Code](https://code.visualstudio.com), bem como foi instalado o [Git](https://git-scm.com/downloads) para gerenciamento local dos repositórios via Visual Studio Code por meio da clonagem dos repositórios com o comando:
+
+```bash
+git clone <URL_DO_REPOSITÓRIO>
+```
+
+Após a clonagem, foi feito o login na conta do GitHUb para acesso ao repositório. Dessa forma, é crucial tais ferramentas para a criação e o manejo da aplicação, sendo adequada a cada sistema Operacional, cada tipo de máquina e cada necessidade.
+
 ### O que é GitHub Actions?
 GitHub Actions é uma plataforma de integração contínua e entrega contínua (CI/CD) que permite automatizar a compilação, testar e pipeline de implantação.
 
