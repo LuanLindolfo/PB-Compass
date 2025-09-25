@@ -37,7 +37,7 @@ A solução consiste em dois repositórios e duas ferramentas principais de auto
 
 ## Repositório
 Para a atual aplicação, foram criados dois repositórios chamados [*hello-app*](https://github.com/LuanLindolfo/hello-app) e *hello-manifests*
-- No repositório [*hello-app*](https://github.com/LuanLindolfo/hello-app) foram implementadas algumas variáveis de segredo para que não fiquem expostos os valores, sendo utilizadas nos códigos yaml que controem a aplicação. Dessa forma, estão resguardada com relação a perigos externos, sendo elas:
+- No repositório [*hello-app*](https://github.com/LuanLindolfo/hello-app) foram implementadas algumas variáveis de segredo (Configurações no nível do repositório > Secrets and Variables > Actions > New Repository secret) para que não fiquem expostos os valores, sendo utilizadas nos códigos yaml que constroem a aplicação. Dessa forma, estão resguardada com relação a perigos externos, sendo elas:
   1. DOCKER_USERNAME: É a identidade para autenticar no Docker Hub durante o processo de build e publicação da imagem.
   2. DOCKER_PASSWORD:  É a senha da conta do Docker Hub. Ela é usada em conjunto com o DOCKER_USERNAME para autenticar a sua conta. Foi utilizada para questão opcional caso a variável DOCKER_TOKEN não funcione. Deve ser implementada no código.
   4. DOCKER_TOKEN: Um Personal Access Token (PAT). É uma alternativa mais segura para a senha, e é gerado diretamente na conta do DockerHub. Possui a vantagem de ser revogado a qualquer momento.
