@@ -1,6 +1,15 @@
 # CI/CD com o Github Actions
 ## Sumário
 - [Objetivo](/Objetivo)
+- [Repositórios](Repositórios)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Ferramentas e Configurações Essenciais](#ferramentas-e-informações-essenciais)
+- [Arquitetura e Fluxo de CI/CD](#arquitetura-do-projeto)
+- [Repositório hello-app e Variáveis de Segredo](#repositório-hello-app)
+- [Arquivos dos Repositórios](#arquivos-dos-repositórios)
+- [Conceitos e Uso do ArgoCD](#o-que-é-argocd)
+- [Acesso e Visualização da Aplicação](#aplicação-argocd)
+
 
 ## Tecnologias Utilizadas 💻
 ![YAML](https://img.shields.io/badge/YAML-CB171E?style=for-the-badge&logo=yaml&logoColor=white)
@@ -13,11 +22,11 @@
 ## Objetivo 🎯
 Automatizar o ciclo completo de desenvolvimento, build, deploy e execução de uma aplicação FastAPI simples, usando GitHub Actions para CI/CD, Docker Hub como registry, e ArgoCD para entrega contínua em Kubernetes local com Rancher Desktop
 
-## Repositórios
+## Repositórios 📒
 - [hello-app](https://github.com/LuanLindolfo/hello-app/tree/main)
 - [hello-manifests](https://github.com/LuanLindolfo/hello-manifests)
 
-## Ferramentas e informações essenciais
+## Ferramentas e informações essenciais 🛠️
 Nesse projeto, foi realizado em um ambiente [WSL Ubuntu](https://apps.microsoft.com/detail/9NZ3KLHXDJP5?hl=neutral&gl=BR&ocid=pdpshare) com instalação do [Kubectl](https://kubernetes-io.translate.goog/docs/reference/kubectl/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc) com [instalação no Ubuntu](https://kubernetes.io/pt-br/docs/tasks/tools/install-kubectl-linux), posteriormente foi criado o cluster que está sendo monitorado e gerenciado pelo [Rancher Desktop](https://rancherdesktop.io) que além do monitoramento do cluester e dos nós, também roda e inicia o [Docker Engine no Ubuntu](https://docs.docker.com/engine/install/ubuntu). outro fator crucial é a instalação do [Python 3](https://python.org.br/instalacao-windows) que foi instalado no sistema operacional nativo da máquina (Windows) e gerenciado via [Visual Studio Code](https://code.visualstudio.com), bem como foi instalado o [Git](https://git-scm.com/downloads) para gerenciamento local dos repositórios via Visual Studio Code por meio da clonagem dos repositórios com o comando:
 
 ```bash
@@ -42,13 +51,13 @@ A solução consiste em dois repositórios e duas ferramentas principais de auto
   ## Pipelines
   Pipeline é conceituado em etapas de processamento de processos conectados executando tarefas em um ordem e preparando dados, posteriormente encaminhando para um repositório.
 
-  ### Funcionamento das etapas de processos
+  ### Funcionamento das etapas de processos 🔁
   - O GithubActions detecta um novo commit no repositório *hello-app*, acionando assim o pipeline do CI/CD
   - Uma imagem é criada no Docker e publicada no DockerHub
   - Em seguida, o arquivo deployment.yaml é atualizado no repositório *hello-manifests*
   - Toda a atualização é monitorada pelo ArgoCD, basta sincronizar na aplicação criada no ArgoCD
 
-## Repositório
+## Repositório 📒
 Para a atual aplicação, foram criados dois repositórios chamados [*hello-app*](https://github.com/LuanLindolfo/hello-app) e [*hello-manifests*](https://github.com/LuanLindolfo/hello-manifests)
 - No repositório [*hello-app*](https://github.com/LuanLindolfo/hello-app) foram implementadas algumas variáveis de segredo (Configurações no nível do repositório > Secrets and Variables > Actions > New Repository secret) para que não fiquem expostos os valores, sendo utilizadas nos códigos yaml que constroem a aplicação. Dessa forma, estão resguardada com relação a perigos externos, sendo elas:
   1. DOCKER_USERNAME: É a identidade para autenticar no Docker Hub durante o processo de build e publicação da imagem.
@@ -95,7 +104,7 @@ Dentro do repositório foi criado o [Workspace](/.github/workflows) para compila
 
 O processo poderá ser prosseguido desde que o deploy e a build do worflow seja bem sucedio, pode ser visto na aba "actions" no repositório.
 
-## Arquivos dos repositórios
+## Arquivos dos repositórios 📒
 **Arquivos da Aplicação (hello-app)**
   - *main.py*: Código-fonte da aplicação contendo a lógica da aplicação web, ou seja, a mensagem "Hello World" (que pode ser customizada em seguida) é exibida quando há acessa.
 
@@ -159,7 +168,7 @@ Os comandos funcionam da seguinte forma:
 Em seguida basta acessar a aplicação por meio da pesquisa: https://localhost:8080
 É importante ressaltar que a porta do tráfego, desde que na faixa de permissão, pode ser alterada para: 9000, 9001 e afins
 
-## Aplicação ArgoCD
+## Aplicação ArgoCD 🔁
 No ArgoCD foi criada a aplicação para monitoramento, as informações foram preenchidas com as seguintes bases:
 - Application Name: Nome Customizado pra aplicação
 - Project Name: default
