@@ -13,6 +13,10 @@
 ## Objetivo 🎯
 Automatizar o ciclo completo de desenvolvimento, build, deploy e execução de uma aplicação FastAPI simples, usando GitHub Actions para CI/CD, Docker Hub como registry, e ArgoCD para entrega contínua em Kubernetes local com Rancher Desktop
 
+## Repositórios
+- [hello-app](https://github.com/LuanLindolfo/hello-app/tree/main)
+- [hello-manifests](https://github.com/LuanLindolfo/hello-manifests)
+
 ## Ferramentas e informações essenciais
 Nesse projeto, foi realizado em um ambiente [WSL Ubuntu](https://apps.microsoft.com/detail/9NZ3KLHXDJP5?hl=neutral&gl=BR&ocid=pdpshare) com instalação do [Kubectl](https://kubernetes-io.translate.goog/docs/reference/kubectl/?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=tc) com [instalação no Ubuntu](https://kubernetes.io/pt-br/docs/tasks/tools/install-kubectl-linux), posteriormente foi criado o cluster que está sendo monitorado e gerenciado pelo [Rancher Desktop](https://rancherdesktop.io) que além do monitoramento do cluester e dos nós, também roda e inicia o [Docker Engine no Ubuntu](https://docs.docker.com/engine/install/ubuntu). outro fator crucial é a instalação do [Python 3](https://python.org.br/instalacao-windows) que foi instalado no sistema operacional nativo da máquina (Windows) e gerenciado via [Visual Studio Code](https://code.visualstudio.com), bem como foi instalado o [Git](https://git-scm.com/downloads) para gerenciamento local dos repositórios via Visual Studio Code por meio da clonagem dos repositórios com o comando:
 
@@ -45,7 +49,7 @@ A solução consiste em dois repositórios e duas ferramentas principais de auto
   - Toda a atualização é monitorada pelo ArgoCD, basta sincronizar na aplicação criada no ArgoCD
 
 ## Repositório
-Para a atual aplicação, foram criados dois repositórios chamados [*hello-app*](https://github.com/LuanLindolfo/hello-app) e *hello-manifests*
+Para a atual aplicação, foram criados dois repositórios chamados [*hello-app*](https://github.com/LuanLindolfo/hello-app) e [*hello-manifests*](https://github.com/LuanLindolfo/hello-manifests)
 - No repositório [*hello-app*](https://github.com/LuanLindolfo/hello-app) foram implementadas algumas variáveis de segredo (Configurações no nível do repositório > Secrets and Variables > Actions > New Repository secret) para que não fiquem expostos os valores, sendo utilizadas nos códigos yaml que constroem a aplicação. Dessa forma, estão resguardada com relação a perigos externos, sendo elas:
   1. DOCKER_USERNAME: É a identidade para autenticar no Docker Hub durante o processo de build e publicação da imagem.
   2. DOCKER_PASSWORD:  É a senha da conta do Docker Hub. Ela é usada em conjunto com o DOCKER_USERNAME para autenticar a sua conta. Foi utilizada para questão opcional caso a variável DOCKER_TOKEN não funcione. Deve ser implementada no código.
