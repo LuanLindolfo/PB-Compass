@@ -89,6 +89,8 @@ Dentro do repositório foi criado o [Workspace](/.github/workflows) para compila
 
 6. Commit e Push das Alterações: Por fim, o pipeline faz o commit e o push da alteração que foi feita no Passo 5. Ele adiciona o arquivo deployment.yaml modificado, cria uma mensagem de commit e envia a alteração para o repositório de manifestos. Isso faz com que o repositório de implantação esteja sempre sincronizado com a última versão do seu código.
 
+O processo poderá ser prosseguido desde que o deploy e a build do worflow seja bem sucedio, pode ser visto na aba "actions" no repositório.
+
 ## Arquivos dos repositórios
 **Arquivos da Aplicação (hello-app)**
   - *main.py*: Código-fonte da aplicação contendo a lógica da aplicação web, ou seja, a mensagem "Hello World" (que pode ser customizada em seguida) é exibida quando há acessa.
@@ -164,4 +166,15 @@ No ArgoCD foi criada a aplicação para monitoramento, as informações foram pr
 - Cluster URL: in-cluster (cluster local)
 - Namespace: default
 
-Em seguida, basta verificar no block da aplicação que estará "OutOfSync", basta sincronizar clicando no botão "SYNC" e aguardar a sincronização e a aplicação ficar Synced e HEALTHY que estará sincronizada e estável
+Em seguida, basta verificar no block da aplicação que estará "OutOfSync", basta sincronizar clicando no botão "SYNC" e aguardar a sincronização e a aplicação ficar Synced e HEALTHY que estará sincronizada e estável.
+
+Posteriormente, basta acessar a aplicação por meio do comando de acesso e escuta à porta utilizando a porta 9001 como exemplo: 
+```bash
+kubectl port-forward svc/hello-app-service 9001:8080
+```
+- kubectl port-forward: Inicia o processo de redirecionamento de portas.
+
+- svc/hello-app-service: Identifica o serviço do Kubernetes de acesso, neste caso, o serviço que expõe a aplicação (hello-app-service).
+
+- 9001:8080: Roteia o tráfego. Tudo o que acessar na porta 9001 na sua máquina local (localhost:9001) será enviado para a porta 8080 do serviço dentro do Kubernetes.
+
