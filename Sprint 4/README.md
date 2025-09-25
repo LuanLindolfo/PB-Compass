@@ -46,6 +46,39 @@ Para a atual aplicação, foram criados dois repositórios chamados [*hello-app*
   7. MANIFESTS_REPO_URL: O URL do seu repositório de manifestos, que o GitHub Actions usa para fazer a clonagem.
   8. MANIFESTS_TOKEN: É um nome que pode ser dado a um token de acesso pessoal do GitHub para autenticar o push para o repositório de manifestos, sendo uma opção válida quanto à chave SSH
 
+Dentro do repositório foi criado o [Workspace](/.github/workflows) para compilar o código e realizar as actions, dentro da construção do código, há blocos de tarefas:
+
+1. Checkout do Código da Aplicação: A primeira etapa baixa o código-fonte da sua aplicação do repositório e garante que o pipeline tenha acesso aos arquivos para construir a imagem Docker. É importante analisar que o código está configurado para disparar quando selecionado o run do worflow ou em cada pull request do branch main (principal), na seguinte estrutura:
+```yaml
+     on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+```
+   Porém pode ser alterado para que rode a cada push no repositório ou em cada pull request do branch main (principal) na seguinte maneira:
+```yaml
+     on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+```
+2. Login no Docker Hub: Realiza o login no Docker Hub, de forma segura, usando credenciais seguras armazenadas como variáveis de ambiente (secrets). O login é necessário para que a máquina virtual tenha permissão para publicar (fazer push) a imagem Docker.
+
+4. Construir e Publicar a Imagem Docker: O workflow constrói a imagem Docker da aplicação. Após a construção, ele publica a imagem no Docker Hub com duas tags:
+
+ - latest: Uma tag que aponta para a versão mais recente.
+
+ - github.sha: Uma tag única com o ID (hash) do commit que acionou o workflow. Isso é útil para rastrear qual versão do código corresponde a qual imagem.
+
+4. Checkout do Repositório de Manifestos: Esta é uma etapa crucial para a entrega contínua. O workflow acessa um segundo repositório, *hello-manifests*, que contém arquivos de configuração (manifestos) para implantação, como um deployment.yaml para Kubernetes. A permissão de acesso é concedida por um token específico e seguro (MANIFESTS_TOKEN).
+
+5. Atualizar a Tag da Imagem no Arquivo de Manifestos: O script sed nesta etapa procura e substitui a tag da imagem no arquivo deployment.yaml dentro da pasta manifests. Ele atualiza o nome da imagem para a tag única gerada no Passo 3 (github.sha), garantindo que a configuração de implantação sempre aponte para a versão correta e mais recente da sua imagem.
+
+6. Commit e Push das Alterações: Por fim, o pipeline faz o commit e o push da alteração que foi feita no Passo 5. Ele adiciona o arquivo deployment.yaml modificado, cria uma mensagem de commit e envia a alteração para o repositório de manifestos. Isso faz com que o repositório de implantação esteja sempre sincronizado com a última versão do seu código.
 
 
 
