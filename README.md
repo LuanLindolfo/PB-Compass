@@ -14,3 +14,6 @@
 
 ### [GitOps na prática](/Sprint%203) ⚙️
 - [GitOps](/Sprint%203/README.md)
+
+### [CI/CD com o Github Actions](/Sprint%204)📒🔁
+- [CI/CD com o Github Actions](/Sprint%204/README.md)
