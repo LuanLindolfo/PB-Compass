@@ -29,9 +29,24 @@ A solução consiste em dois repositórios e duas ferramentas principais de auto
   ## Pipelines
   Pipeline é conceituado em etapas de processamento de processos conectados executando tarefas em um ordem e preparando dados, posteriormente encaminhando para um repositório.
 
-  ### Funcionamento da etapas de processos
+  ### Funcionamento das etapas de processos
   - O GithubActions detecta um novo commit no repositório *hello-app*, acionando assim o pipeline do CI/CD
   - Uma imagem é criada no Docker e publicada no DockerHub
   - Em seguida, o arquivo deployment.yaml é atualizado no repositório *hello-manifests*
   - Toda a atualização é monitorada pelo ArgoCD, basta sincronizar na aplicação criada no ArgoCD
+
+## Repositório
+Para a atual aplicação, foram criados dois repositórios chamados [*hello-app*](https://github.com/LuanLindolfo/hello-app) e *hello-manifests*
+- No repositório [*hello-app*](https://github.com/LuanLindolfo/hello-app) foram implementadas algumas variáveis de segredo para que não fiquem expostos os valores, sendo utilizadas nos códigos yaml que controem a aplicação. Dessa forma, estão resguardada com relação a perigos externos, sendo elas:
+  1. DOCKER_USERNAME: É a identidade para autenticar no Docker Hub durante o processo de build e publicação da imagem.
+  2. DOCKER_PASSWORD:  É a senha da conta do Docker Hub. Ela é usada em conjunto com o DOCKER_USERNAME para autenticar a sua conta. Foi utilizada para questão opcional caso a variável DOCKER_TOKEN não funcione. Deve ser implementada no código.
+  4. DOCKER_TOKEN: Um Personal Access Token (PAT). É uma alternativa mais segura para a senha, e é gerado diretamente na conta do DockerHub. Possui a vantagem de ser revogado a qualquer momento.
+  5. SSH_PRIVATE_KEY: A chave privada SSH que foi gerada. Ela é a credencial para autenticar e obter acesso de escrita no repositório de manifestos (hello-manifests), permitindo que o GitHub Actions faça commits e pushs das alterações.
+  6. SSH_PRIVATE_KEY.pub: Extensão púiblica da chave SSH com permissão para escrita no repositório de manifestos (hello-manifests).
+  7. MANIFESTS_REPO_URL: O URL do seu repositório de manifestos, que o GitHub Actions usa para fazer a clonagem.
+  8. MANIFESTS_TOKEN: É um nome que pode ser dado a um token de acesso pessoal do GitHub para autenticar o push para o repositório de manifestos, sendo uma opção válida quanto à chave SSH
+
+
+
+
 
