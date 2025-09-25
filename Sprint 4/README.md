@@ -105,4 +105,26 @@ Dentro do repositório foi criado o [Workspace](/.github/workflows) para compila
   - *service.yaml*: Este manifesto define como expor a sua aplicação. Ele cria um serviço que roteia o tráfego externo para os pods da sua aplicação, tornando-a acessível.
 
 
-## Sincronização
+## Namespace do ArgoCD
+Para a ambientalização da aplicação, foi criado um namespace para o ArgoCD com o comando
+```bash
+kubectl create namespace argocd
+```
+Um namespace é conceituado em uma espécie de pasta que organiza e isola as funções e os agentes no cluster sem que tenham conflito e utilizem o mesmo recurso.
+
+Em seguida foi acessada à aplicação do ArgoCD com um comando que faz a porta da aplicação ser ouvida e consequentemente abrir a porta de acesso, por meio do comando:
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+Os comandos funcionam da seguinte forma:
+- kubectl port-forward: Este é o comando que estabelece a conexão e encaminha o tráfego de uma porta local para uma porta de um serviço dentro do cluster.
+
+- svc/argocd-server: O comando identifica o serviço do Kubernetes (servidor do ArgoCD) ao qual você quer se conectar.
+
+- -n argocd: Esta flag especifica o namespace onde o serviço está localizado, instalando em seu próprio namespace para organização.
+
+- 8080:443: O tráfego que chega na porta 8080 na máquina local será roteado para a porta 443 do serviço do ArgoCD, porta padrão do tráfego seguro HTTPS.
+
+Em seguida basta acessar a aplicação por meio da pesquisa: https://localhost:8080
+É importante ressaltar que a porta do tráfego, desde que na faixa de permissão, pode ser alterada para: 9000, 9001 e afins
