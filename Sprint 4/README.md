@@ -48,7 +48,7 @@ Para a atual aplicação, foram criados dois repositórios chamados [*hello-app*
 
 Dentro do repositório foi criado o [Workspace](/.github/workflows) para compilar o código e realizar as actions, dentro da construção do código, há blocos de tarefas:
 
-1. Checkout do Código da Aplicação: A primeira etapa baixa o código-fonte da sua aplicação do repositório e garante que o pipeline tenha acesso aos arquivos para construir a imagem Docker. É importante analisar que o código está configurado para disparar quando selecionado o run do worflow ou em cada pull request do branch main (principal), na seguinte estrutura:
+1. Checkout do Código da Aplicação: A primeira etapa baixa o código-fonte da sua aplicação do repositório e garante que o pipeline tenha acesso aos arquivos para construir a imagem Docker. É importante analisar que o código pode ficar configurado para disparar quando selecionado o run do worflow ou em cada pull request do branch main (principal), na seguinte estrutura:
 ```yaml
      on:
   workflow_dispatch:
@@ -80,6 +80,19 @@ Dentro do repositório foi criado o [Workspace](/.github/workflows) para compila
 
 6. Commit e Push das Alterações: Por fim, o pipeline faz o commit e o push da alteração que foi feita no Passo 5. Ele adiciona o arquivo deployment.yaml modificado, cria uma mensagem de commit e envia a alteração para o repositório de manifestos. Isso faz com que o repositório de implantação esteja sempre sincronizado com a última versão do seu código.
 
+## Arquivos dos repositórios
+**Arquivos da Aplicação (hello-app)**
+main.py: Código-fonte da aplicação contendo a lógica da aplicação web, ou seja, a mensagem "Hello World" (que pode ser customizada em seguida) é exibida quando há acessa.
 
+Dockerfile: Arquivo padrão de mapeamento de criação da imagem Docker da aplicação. Nele há instrução ao Docker sobre como empacotar o código, as dependências e o ambiente necessário para a aplicação rodar.
+
+requirements.txt: É a lista das dependências do projeto. O Dockerfile usa este arquivo para saber quais bibliotecas (fastapi, uvicorn) precisam ser instaladas para que a aplicação funcione.
+
+main.yml: Este é o workflow do GitHub Actions que une todas as peças da aplicação, automatiza o processo de contrução, a imagem Docker, publica e atualiza o repositório de manifestos.
+
+**Arquivos de Manifesto (hello-manifests)**
+deployment.yaml: Comunicador que diz ao Kubernetes como implantar a sua aplicação, definindo o número de réplicas (cópias) da aplicação que devem ser executadas e qual imagem Docker usar.
+
+service.yaml: Este manifesto define como expor a sua aplicação. Ele cria um serviço que roteia o tráfego externo para os pods da sua aplicação, tornando-a acessível.
 
 
