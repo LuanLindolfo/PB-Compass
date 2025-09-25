@@ -96,3 +96,4 @@ Dentro do repositório foi criado o [Workspace](/.github/workflows) para compila
   - *service.yaml*: Este manifesto define como expor a sua aplicação. Ele cria um serviço que roteia o tráfego externo para os pods da sua aplicação, tornando-a acessível.
 
 
+## Sincronização
