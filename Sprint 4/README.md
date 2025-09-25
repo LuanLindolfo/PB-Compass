@@ -128,3 +128,16 @@ Os comandos funcionam da seguinte forma:
 
 Em seguida basta acessar a aplicação por meio da pesquisa: https://localhost:8080
 É importante ressaltar que a porta do tráfego, desde que na faixa de permissão, pode ser alterada para: 9000, 9001 e afins
+
+## Aplicação ArgoCD
+No ArgoCD foi criada a aplicação para monitoramento, as informações foram preenchidas com as seguintes bases:
+- Application Name: Nome Customizado pra aplicação
+- Project Name: default
+- SYNC POLICY: Manual
+- Repository URL: Link do repositório de manifestos (dado qe será monitorado quaisquer atualização no doc de configuração/deploy)
+- Revision: HEAD
+- Path: . (Para acesso na pasta raíz)
+- Cluster URL: in-cluster (cluster local)
+- Namespace: default
+
+Em seguida, basta verificar no block da aplicação que estará "OutOfSync", basta sincronizar clicando no botão "SYNC" e aguardar a sincronização e a aplicação ficar Synced e HEALTHY que estará sincronizada e estável
