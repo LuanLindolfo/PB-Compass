@@ -181,3 +181,7 @@ kubectl port-forward svc/hello-app-service 9001:8080
 A aplicação deverá aparecer dessa forma:
 
 ![Aplicação main.py](/Sprint%204/Print.png)
+
+É possível customizar a mensagem implementada no arquivo [main.py](https://github.com/LuanLindolfo/hello-app/blob/main/main.py) como no exemplo abaixo:
+
+![Aplicação customizada](/Sprint%204/Print2.png)
