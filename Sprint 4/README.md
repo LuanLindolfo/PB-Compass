@@ -178,3 +178,6 @@ kubectl port-forward svc/hello-app-service 9001:8080
 
 - 9001:8080: Roteia o tráfego. Tudo o que acessar na porta 9001 na sua máquina local (localhost:9001) será enviado para a porta 8080 do serviço dentro do Kubernetes.
 
+A aplicação deverá aparecer dessa forma:
+
+![Aplicação main.py](/Sprint%204/Print.png)
