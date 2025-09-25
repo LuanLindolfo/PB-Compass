@@ -82,17 +82,17 @@ Dentro do repositório foi criado o [Workspace](/.github/workflows) para compila
 
 ## Arquivos dos repositórios
 **Arquivos da Aplicação (hello-app)**
-main.py: Código-fonte da aplicação contendo a lógica da aplicação web, ou seja, a mensagem "Hello World" (que pode ser customizada em seguida) é exibida quando há acessa.
+  - *main.py*: Código-fonte da aplicação contendo a lógica da aplicação web, ou seja, a mensagem "Hello World" (que pode ser customizada em seguida) é exibida quando há acessa.
 
-Dockerfile: Arquivo padrão de mapeamento de criação da imagem Docker da aplicação. Nele há instrução ao Docker sobre como empacotar o código, as dependências e o ambiente necessário para a aplicação rodar.
+  - *Dockerfile*: Arquivo padrão de mapeamento de criação da imagem Docker da aplicação. Nele há instrução ao Docker sobre como empacotar o código, as dependências e o ambiente necessário para a aplicação rodar.
 
-requirements.txt: É a lista das dependências do projeto. O Dockerfile usa este arquivo para saber quais bibliotecas (fastapi, uvicorn) precisam ser instaladas para que a aplicação funcione.
+  - *requirements.txt*: É a lista das dependências do projeto. O Dockerfile usa este arquivo para saber quais bibliotecas (fastapi, uvicorn) precisam ser instaladas para que a aplicação funcione.
 
-main.yml: Este é o workflow do GitHub Actions que une todas as peças da aplicação, automatiza o processo de contrução, a imagem Docker, publica e atualiza o repositório de manifestos.
+  - *main.yml*: Este é o workflow do GitHub Actions que une todas as peças da aplicação, automatiza o processo de contrução, a imagem Docker, publica e atualiza o repositório de manifestos.
 
 **Arquivos de Manifesto (hello-manifests)**
-deployment.yaml: Comunicador que diz ao Kubernetes como implantar a sua aplicação, definindo o número de réplicas (cópias) da aplicação que devem ser executadas e qual imagem Docker usar.
+  - *deployment.yaml*: Comunicador que diz ao Kubernetes como implantar a sua aplicação, definindo o número de réplicas (cópias) da aplicação que devem ser executadas e qual imagem Docker usar.
 
-service.yaml: Este manifesto define como expor a sua aplicação. Ele cria um serviço que roteia o tráfego externo para os pods da sua aplicação, tornando-a acessível.
+  - *service.yaml*: Este manifesto define como expor a sua aplicação. Ele cria um serviço que roteia o tráfego externo para os pods da sua aplicação, tornando-a acessível.
 
 
